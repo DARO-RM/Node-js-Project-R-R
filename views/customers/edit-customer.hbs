@@ -1,0 +1,356 @@
+<div class="card">
+    <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"></i> {{translation.Cus_Edi_Customers}}</h4>
+                <span class="text-danger m-l-30">{{translation.Cus_Required}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/customers">
+                    <h5><i class="feather icon-arrow-left"></i> {{translation.Cus_Back_to_Customers}}</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+    <div class="card-block">
+        {{> form-people }}
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+$(document).ready(function(){  
+ 
+  var delete_file_data = 0;
+  var delete_id =0;
+
+  get_customers();
+
+  $(document).on('click','#detele_old',function(){
+      $('.jFiler-items').hide();
+      $('.jFiler-input-caption').html('Input file here');
+      delete_id = $(this).attr('name');
+      delete_file_data = 1;
+  });
+
+  var form = $("#registration");
+  form.on("submit", function (event) {
+      if(!form.valid()) {
+          return false; 
+      }
+      event.preventDefault(); 
+      var data_ajax = {};
+      var id = getUrlParameter('id');
+      data_ajax.first_name = $("#first_name").val();
+      data_ajax.last_name = $("#last_name").val();
+      data_ajax.full_name = $("#full_name").val();
+      data_ajax.account_number =$("#account_number").val();
+      data_ajax.sex = $('input:radio[name=sex]:checked').val();
+      data_ajax.phone_1 = $("#phone_1").val();
+      data_ajax.phone_2 = $("#phone_2").val();
+      data_ajax.email = $("#email").val();
+      data_ajax.facebook =$("#facebook").val();
+      data_ajax.telegram =$("#telegram").val();
+      data_ajax.work =$("#work").val();
+      data_ajax.company_name =$("#company_name").val();
+      data_ajax.company_address =$("#company_address").val();
+      data_ajax.national_number =$("#national_number").val();
+      data_ajax.national_number_expire =$("#national_number_expire").val();
+      data_ajax.visa_number =$("#visa_number").val();
+      data_ajax.visa_number_expire =$("#visa_number_expire").val();
+      data_ajax.passport_number =$("#passport_number").val();
+      data_ajax.passport_number_expire =$("#passport_number_expire").val();
+      data_ajax.address_1 =$("#address_1").val();
+      data_ajax.address_2 =$("#address_2").val();
+      data_ajax.dob =$("#dob").val();
+      data_ajax.age =$("#age").val();
+      data_ajax.pob =$("#pob").val();
+      data_ajax.country =$("#country").val();
+      data_ajax.city =$("#city").val();
+      data_ajax.district =$("#district").val();
+      data_ajax.commune =$("#commune").val();
+      data_ajax.village =$("#village").val();
+      data_ajax.zip_code =$("#zip_code").val();
+      data_ajax.description =$("#description").val();
+      var image = $("#filer_input").val();
+      data_ajax.file_data = "";
+      data_ajax.file_name = ""; 
+
+      if(image != ""){
+          const image_file = document.querySelector('#filer_input').files[0];
+          data_ajax.file_name = image_file.name;
+          toBase64(image_file).then(async (res)=>{
+                data_ajax.file_data = await resizeImage(res); 
+                $.ajax({
+                    url:"/api/customers/edit/"+id,
+                    method:"POST",
+                    dataType:'json',
+                    data:data_ajax,
+                    success: function(res){
+                      if(res.msg == "success"){
+                          //window.location.replace("/customers");
+                          new PNotify({
+                              title: 'Edit Success',
+                              icon: 'icofont icofont-info-circle',
+                              type: 'success',
+                              delay: 500,
+                              after_close: function(){
+                                  history.pushState('/customers/edit', '','/customers');
+                                  location.reload(); 
+                              }
+                          });
+                      }else{
+                          alert('some error occurred try again');
+                      }
+                    } ,
+                    error:function(response){
+                        alert('server error occured')
+                    }
+                }) //end ajax
+              
+          }).catch((err)=>{alert(err)});
+
+    }else{
+      if(delete_file_data ==1){
+          delete_file(delete_id);
+      }
+
+      $.ajax({
+        url:"/api/customers/edit/"+id,
+        method:"POST",
+        dataType:'json',
+        data:data_ajax,
+        success: function(res){
+          
+            new PNotify({
+                title: 'Edit Success',
+                icon: 'icofont icofont-info-circle',
+                type: 'success',
+                delay: 500,
+                after_close: function(){
+                    history.pushState('/customers/edit', '','/customers');
+                    location.reload(false);
+                  
+                }
+            });
+          
+        },
+        error:function(response){
+          console.log(response);
+            new PNotify({
+                title: 'Server Error',
+                icon: 'icofont icofont-info-circle',
+                type: 'error'
+            });
+        }
+      });
+    }
+  });
+
+  $("#cancel").click(function(){
+      window.location.href = "/customers";
+  });
+
+  function get_customers(){
+      var id = getUrlParameter('id');
+      var data = {};   
+      $.ajax({
+        url: '/api/customers/edit/'+id, 
+        type: 'GET',
+        contentType: 'application/json', 
+        data: JSON.stringify(data),
+        success: function(res) {
+          const data = res.rows[0];
+          $('#id').val(id);
+          $("#first_name").val(data.first_name);
+          $("#last_name").val( data.last_name);
+          $("#full_name").val( data.full_name);
+          $("#account_number").val(data.account_number);
+          $('input:radio[value='+data.sex+']').attr('checked',true);
+          $("#phone_1").val(data.phone_1);
+          $("#phone_2").val(data.phone_2);
+          $("#email").val(data.email);
+          $("#facebook").val(data.facebook);
+          $("#telegram").val(data.telegram);
+          $("#work").val(data.work);
+          $("#company_name").val(data.company_name);
+          $("#company_address").val(data.company_address);
+          $("#national_number").val(data.national_number);
+          $("#visa_number").val(data.visa_number);
+          $("#passport_number").val(data.passport_number);
+          $("#address_1").val(data.address_1);
+          $("#address_2").val(data.address_2);
+          $("#age").val(data.age);
+          $("#pob").val(data.pob);
+          $("#country").val(data.country);
+          $("#city").val(data.city);
+          $("#district").val(data.district);
+          $("#commune").val(data.commune);
+          $("#village").val(data.village);
+          $("#zip_code").val(data.zip_code);
+          $("#description").val(data.description);
+
+          if(data.national_number_expire != ''){
+            $("#national_number_expire").val(data.national_number_expire);
+              $("#national_number_expire").daterangepicker({
+                  "singleDatePicker": true,
+                  "showDropdowns": true,       
+                  "autoUpdateInput": true,
+                  "value":data.national_number_expire
+              });
+          }
+          if(data.visa_number_expire != ''){
+            $("#visa_number_expire").val(data.visa_number_expire);
+            $('#visa_number_expire').daterangepicker({
+                  "singleDatePicker": true,
+                  "showDropdowns": true,       
+                  "autoUpdateInput": true,
+                  "value":data.visa_number_expire
+              });
+          }
+          if(data.passport_number_expire != ''){
+            $("#passport_number_expire").val(data.passport_number_expire);
+            $('#passport_number_expire').daterangepicker({
+                  "singleDatePicker": true,
+                  "showDropdowns": true,       
+                  "autoUpdateInput": true,
+                  "value":data.passport_number_expire
+              });
+          }
+          if( data.dob != ''){
+            $("#dob").val(data.dob)
+              $('#dob').daterangepicker({
+                  "singleDatePicker": true,
+                  "showDropdowns": true,       
+                  "autoUpdateInput": true,
+                  "value":data.dob
+              });
+          }
+
+          if(data.FileData != "" && data.FileName != ""){
+                var file = dataURLtoFile(data.FileData,data.FileName)
+                //console.log(file.name);
+                var photo_name = ""+file.name;
+                var photo_size = ""+file.size;
+                var photo_type = ""+file.type;
+                append_photo(photo_name,photo_size,photo_type,data.file_id);
+          }
+        }
+      });
+  }
+
+  function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+    sURLVariables = sPageURL.split('&'), sParameterName, i;
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] === sParam) {
+            return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+      }
+      return false;
+  }
+
+  const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+  });
+
+  function append_photo(name,size,type,image_id){
+            
+          var description = '<span>1 files were chosen</span>'
+          var temp = '<div class="jFiler-items jFiler-row">'
+              temp += '<ul class="jFiler-items-list jFiler-items-default">'
+              temp +=' <li class="jFiler-item" data-jfiler-index="0" style="">'
+              temp += '<div class="jFiler-item-container">'
+              temp +=  '<div class="jFiler-item-inner">'
+              temp +=           '<div class="jFiler-item-icon pull-left">'
+              temp +=                '<i class="icon-jfi-file-o jfi-file-type-image jfi-file-ext-jpg"></i>'
+              temp +=   ' </div>'
+              temp +=    '<div class="jFiler-item-info pull-left">'
+              temp +=          '  <div class="jFiler-item-title" title="'+name+'">'+name+'</div>'
+              temp +=           ' <div class="jFiler-item-others"> '
+              temp +=                '<span>size: '+size+'</span>'
+              temp +=               ' <span>type: '+type+'</span>'
+              temp +=               ' <span class="jFiler-item-status"></span>'
+              temp +=           ' </div>'
+              temp +=   ' <div class="jFiler-item-assets">'
+              temp +=           ' <ul class="list-inline">'
+              temp +=               ' <li>'
+              temp +=                  ' <a class="icon-jfi-trash jFiler-item-trash-action" id="detele_old" name="'+image_id+'"></a>'
+              temp +=                '</li>'
+              temp +=            '</ul>'
+              temp +=   ' </div>'
+              temp +=     ' </div>'
+              temp +=    '</div>'
+              temp += '</div>'
+              temp += '</li></div></ul>'
+    
+          $('.jFiler-input').after(temp);
+          $('.jFiler-input-caption').html(description);
+  }
+
+  function dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), 
+      n = bstr.length, 
+      u8arr = new Uint8Array(n);
+
+      while(n--){
+      u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime});
+  }
+
+  const resizeImage = (base64Str) => {
+    return new Promise((resolve) => {
+      let img = new Image()
+      img.src = base64Str
+      img.onload = () => {
+        let canvas = document.createElement('canvas')
+        const MAX_WIDTH = 300;
+        const MAX_HEIGHT = 300;
+        let width = img.width
+        let height = img.height
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width
+            width = MAX_WIDTH
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height
+            height = MAX_HEIGHT
+          }
+        }
+        canvas.width = width
+        canvas.height = height
+        let ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL())
+      }
+    });
+  }
+
+  function delete_file(id){
+    $.ajax({
+      url:'/api/customers/delete_file/'+id,
+      type:"GET",
+      contentType:"application/json",
+      dataType:"json",
+      data:{'id':id},
+      success:function(res){}
+    });
+  }
+
+
+});
+
+
+
+</script>

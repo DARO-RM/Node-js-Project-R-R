@@ -1,0 +1,214 @@
+<form  name="registration" id="registration">
+<div class="card">
+    <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"></i> New Customer</h4>
+                <span class="text-pink m-l-30">Field red are required</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/employees">
+                    <h5><i class="feather icon-arrow-left"></i> Back to employee</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+    <div class="card-block">
+        {{> form-people }}
+    </div>
+
+</div>
+
+   
+</form>
+
+<script type="text/javascript">
+        
+$(document).ready(function(){  
+
+
+
+         
+
+        append_form();
+        append_permission();
+
+
+     var form = $("#registration");
+        form.on("submit", function (e) {
+              
+            if(!form.valid()) {  return false; }
+            
+            e.preventDefault();
+
+            var data_ajax = {};
+
+            data_ajax.phone_number = $("#phone_number").val();
+            data_ajax.password = $("#password").val();
+            data_ajax.permission_id = $('#permission').find(":selected").val();
+    
+            data_ajax.first_name = $("#first_name").val();
+            data_ajax.last_name = $("#last_name").val();
+            data_ajax.full_name = $("#full_name").val();
+            data_ajax.account_number =$("#account_number").val();
+            data_ajax.sex = $('input:radio[name=sex]:checked').val();
+            data_ajax.phone_1 = $("#phone_1").val();
+            data_ajax.phone_2 = $("#phone_2").val();
+            data_ajax.email = $("#email").val();
+            data_ajax.facebook =$("#facebook").val();
+            data_ajax.telegram =$("#telegram").val();
+            data_ajax.work =$("#work").val();
+            data_ajax.company_name =$("#company_name").val();
+            data_ajax.company_address =$("#company_address").val();
+            data_ajax.national_number =$("#national_number").val();
+            data_ajax.national_number_expire =$("#national_number_expire").val();
+            data_ajax.visa_number =$("#visa_number").val();
+            data_ajax.visa_number_expire =$("#visa_number_expire").val();
+            data_ajax.passport_number =$("#passport_number").val();
+            data_ajax.passport_number_expire =$("#passport_number_expire").val();
+            data_ajax.address_1 =$("#address_1").val();
+            data_ajax.address_2 =$("#address_2").val();
+            data_ajax.dob =$("#dob").val();
+            data_ajax.age =$("#age").val();
+            data_ajax.pob =$("#pob").val();
+            data_ajax.country =$("#country").val();
+            data_ajax.city =$("#city").val();
+            data_ajax.district =$("#district").val();
+            data_ajax.commune =$("#commune").val();
+            data_ajax.village =$("#village").val();
+            data_ajax.zip_code =$("#zip_code").val();
+            data_ajax.description =$("#description").val();
+            event.preventDefault();
+            var image = $("#filer_input").val();
+            data_ajax.file_data = "";
+            data_ajax.file_name = ""; 
+   
+       
+        if(image != ""){
+            const image_file = document.querySelector('#filer_input').files[0];
+            data_ajax.file_name = image_file.name;
+            toBase64(image_file)
+            .then(
+            (res)=>{
+                data_ajax.file_data = res; 
+                $.ajax({
+                    url:"/api/employee/add",
+                    method:"POST",
+                    dataType:"json",
+                    data:data_ajax,
+                    success:function(res){
+                          
+                           new PNotify({
+                                title: 'Add success',
+                                icon: 'icofont icofont-info-circle',
+                                type: 'success',
+                                delay: 500,
+                                after_close: function(){
+                                    history.pushState('/employees/add', '','/employees');
+                                    location.reload(); 
+                                }
+                            });
+
+                    },
+                    error:function(response){
+                    alert('server error occured')
+                    }
+                }) //end ajax
+            }).catch((err)=>{alert(err)});
+       }else{
+
+             $.ajax({
+                    url:"/api/employee/add",
+                    method:"POST",
+                    dataType:"json",
+                    data:data_ajax,
+                    success:function(res){
+                        new PNotify({
+                            title: 'Add success',
+                            icon: 'icofont icofont-info-circle',
+                            type: 'success',
+                            delay: 500,
+                            after_close: function(){
+                                history.pushState('/employees/add', '','/employees');
+                                location.reload(); 
+                            }
+                        });
+                    },
+                    error:function(response){
+                    alert('server error occured')
+                    }
+             }) //end ajax
+       }
+    }) // end submit
+
+$("#cancel").click(function(){
+    history.pushState('/employees/add', '','/employees');
+    location.reload(); 
+})//end cancel
+
+function append_permission(){
+          var data = {};        
+        $.ajax({
+		  url: '/api/permission/view',         
+          type: 'GET',
+          contentType: 'application/json', 
+          data: JSON.stringify(data),
+          success: function(res) {
+            if(res.msg=='success'){
+                  $('.row_data').remove()
+                  var temp = "" 
+                $.each(res.rows,function(index,data){
+                  temp +="<option value="+ data.id +">" + data.name + "</option>"
+                })
+                $("#permission").append(temp);
+            //end success
+            }
+            else{
+              alert(" false ")
+            }
+          }
+        }); //end ajax
+
+}//end function
+
+function append_form(){
+     var temp = ' <div class="form-group row">'+
+           '      <label class="col-sm-2 col-form-label text-danger">Phone_Number</label>'+
+           '      <div class="col-sm-10"> '+
+            '         <input type="text" class="form-control" name="phone_number" id="phone_number" placeholder=""> '+
+            '         <span class="messages"></span> '+
+            '     </div> '+
+           '  </div> '+
+           '  <div class="form-group row"> '+
+           '      <label class="col-sm-2 col-form-label text-danger">Password</label>'+
+            '     <div class="col-sm-10"> '+
+            '         <input type="password" class="form-control" name="password" id="password" placeholder=""> '+
+            '         <span class="messages"></span> '+
+            '     </div> '+
+           '  </div> '+
+           '  <div class="form-group row"> '+
+           '      <label class="col-sm-2 text-danger">Permission</label> '+
+            '     <div class="col-sm-10"> '+
+            '         <select class="single_search_select form-control" name="permission" id="permission" tabindex="-1" aria-hidden="true"> '+
+            '             <option value="0" selected="" disabled="">Choose Permission Tenant</option> '+
+            '         </select> '+
+            '         <span class="messages"></span> '+
+            '     </div>'+
+            ' </div>';
+
+   $('.append_permission').html(temp);
+}
+
+const toBase64 = file => new Promise ((resolve, reject) => {
+	    const reader = new FileReader();
+	    reader.readAsDataURL(file);
+	    reader.onload = () => resolve(reader.result);
+	    reader.onerror = error => reject(error);
+	});
+
+
+
+})//end_jquery    
+</script>
+ 

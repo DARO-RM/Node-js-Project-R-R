@@ -1,0 +1,250 @@
+<div class="card">
+	<div class="card-body tab-icon">
+		<div class="row text-center">
+			<div class="col-md-12">
+				{{> nav_rental_collection }}
+				<div class="row" id="get_data">
+					
+					{{!-- <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">
+						<div class="card user-card m-t-10">
+							<div class="card-block p-2">
+								<div class="media bg-white d-flex">
+									<div class="media-left media-middle m-b-5">
+										<a href="#">
+											<img class="media-object" src="/assets/images/timeline/img2.png" alt="">
+										</a>
+									</div>
+									<div class="media-body text-left">
+										<div class="f-20 m-b-5">R-1005</div>
+										<div class="f-12"><b>- {{ translation.Booked_Floor}}</b> F-02</div>
+										<div class="f-12"><b>- {{ translation.Booked_Customer}}</b> Sok Dara</div>
+										<div class="f-12"><b>- {{ translation.Booked_Deposited}}</b> 20 USD</div>
+										<div class="f-12"><b>- {{ translation.Booked_Phone}}</b> <a href="tel:015338826">015 33 88 26</a></div>
+										<div class="f-12"><b>- {{ translation.Rental_Check_In}}</b> <label class="text-danger">20-Sep-2021</label></div>
+									</div>
+								</div>
+								<div>
+									<select name="select" class="form-control">
+										<option value="opt1">Price</option>
+										<option value="opt2">5 USD/3H</option>
+										<option value="opt3">15 USD/1 Night</option>
+										<option value="opt4" selected>100 USD/Month</option>
+										<option value="opt5">250 USD/Month</option>
+										<option value="opt6">300 USD/Month</option>
+									</select>
+								</div>
+								<div class="media-body d-flex">
+									<button type="button" class="btn btn-primary waves-effect waves-light rented"><i class="icofont icofont-check-circled"></i>{{translation.Booked_Rent}}</button>
+									<button type="button" class="btn btn-inverse waves-effect waves-light"><i class="icofont icofont-close-line-circled"></i>{{ translation.Booked_Void}}</button>
+								</div>
+							</div>
+						</div>
+					</div> --}}
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+
+	//	document.querySelector(".rented").addEventListener("click", function() {
+	//		window.location.replace("/rental/rented/add");
+	//	});
+
+
+
+delay( get_booked_room(),500);
+
+$(document).on('click', '.btn_cancel', function(){
+	
+		var id = $(this).attr('name');
+		new PNotify({
+				title: 'You want to Void Booked?',
+				icon: 'icofont icofont-info-circle',
+				type: 'error',
+				hide:'false',
+				confirm: { confirm: true },
+				before_open: function(PNotify) {
+					PNotify.get().css(get_center_pos(PNotify.get().width()));
+				},
+				after_close:function(){
+					get_booked_room();
+				}
+		}).get().on('pnotify.confirm', function() {
+
+			$.ajax({
+				url:"/api/rental/cancel/booked/"+id,
+				type:"POST",
+				contentType:"application/json",
+				dataType:"json",
+				success:function(res){
+					new PNotify({
+						title: 'Void Success',
+						icon: 'icofont icofont-info-circle',
+						type: 'success',
+						delay: 500,
+						after_close:function(){
+							get_booked_room();
+						}
+					});
+				}
+		});
+		}).on('pnotify.cancel', function() {
+			new PNotify({
+				title: 'Not Void',
+				icon: 'icofont icofont-info-circle',
+				type: 'error',
+				delay: 500,
+				after_close:function(){
+					get_booked_room();
+				}
+			})
+		});
+	});
+
+
+$(document).on("click",".btn_rent",function(){
+
+	var id = $(this).attr('name');
+	
+		$("select[name=price]").attr('disabled','disabled');
+		$("#price"+id).removeAttr('disabled');
+	var price =  $('#price'+id+' :selected').val();
+		$("select[name=price]").removeAttr('disabled');
+
+
+	sessionStorage.setItem('price',price);
+	sessionStorage.setItem('booked',id);
+	
+	var url = '/rental/rented/add?id='+id;
+	window.location.replace(url);
+
+})
+
+
+
+
+function get_booked_room(){
+    var data = {};        
+		try{
+			$.ajax({
+				url: '/api/rental/booked_view',       
+				type: 'GET',
+				contentType: 'application/json', 
+				data: JSON.stringify(data),
+				success: function(res) {
+					console.log(res)
+					if(res.rows.length>0){
+						var temp = "" ;
+						$.each(res.rows,function(index,data){
+
+							temp +=	'<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">';
+							temp +=	'	<div class="card user-card m-t-10">';
+							temp +=	'			<div class="card-block p-2">';
+							temp +=	'				<div class="media bg-white d-flex">';
+							temp +=	'					<div class="media-left media-middle m-b-5">';
+							temp +=	'						<a href="#">';
+							temp +=	'							<img class="media-object" src="/assets/images/timeline/img2.png" alt="">';
+							temp +=	'						</a>';
+							temp +=	'					</div>';
+							temp +=	'					<div class="media-body text-left">';
+							temp +=	'						<div class="f-20 m-b-5">'+data.roomName+'</div>';
+							temp +=	'						<div class="f-12"><b>- {{ translation.Booked_Floor}}</b>'+data.floorName+'</div>';
+						    temp +=	'						<div class="f-12"><b>- {{ translation.Booked_Customer}}</b>'+data.customerName+'</div>';
+							temp +=	'						<div class="f-12"><b>- {{ translation.Booked_Deposited}}</b> '+data.deposite+'</div>';
+							temp +=	'						<div class="f-12"><b>- {{ translation.Booked_Phone}}</b> <a href="tel:015338826">'+data.customerPhone+'</a></div>';
+							temp +=	'						<div class="f-12"><b>- {{ translation.Rental_Check_In}}</b> <label class="text-danger">'+data.checked_in+'</label></div>';
+							temp +=	'					</div>';
+							temp +=	'				</div>';
+							temp +=	'				<div>';
+							temp +=	'					<select name="price" id="price'+data.roomId+'" class="form-control">';
+							temp +=	'						<option value="0">Choose Price</option>';
+				//			temp +=	'						<option value="opt2">5 USD/3H</option>';
+			//				temp +=	'						<option value="opt3">15 USD/1 Night</option>';
+			//				temp +=	'						<option value="opt4" selected>100 USD/Month</option>';
+				//			temp +=	'						<option value="opt5">250 USD/Month</option>';
+			//				temp +=	'						<option value="opt6">300 USD/Month</option>';
+							temp +=	'					</select>';
+							temp +=	'				</div>';
+							temp +=	'				<div class="media-body d-flex">';
+							temp +=	'					<button type="button" name='+data.roomId+' class="btn btn-primary waves-effect waves-light btn_rent"><i class="icofont icofont-check-circled"></i>{{translation.Booked_Rent}}</button>';
+							temp +=	'					<button type="button" name='+data.roomId+' class="btn btn-inverse waves-effect waves-light btn_cancel"><i class="icofont icofont-close-line-circled"></i>{{ translation.Booked_Void}}</button>';
+							temp +=	'				</div>';
+							temp +=	'			</div>';
+							temp +=	'		</div>';
+							temp +=	'	</div>';
+
+						});
+						$("#get_data").html(temp).fadeIn();
+						price_append();
+					}else{
+						$("#get_data").empty().fadeIn();
+					}
+				}
+			}); 
+		}catch (error) {
+		  	console.error(error);
+		}
+  }
+
+function delay(callback, ms) {
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+	}
+
+function get_center_pos(width, top)
+	{
+		// top is empty when creating a new notification and is set when recentering
+		if (!top) {
+			top = 30;
+			// this part is needed to avoid notification stacking on top of each other
+			$('.ui-pnotify').each(function() {
+			top += $(this).outerHeight() + 20;
+			});
+		}
+		return {
+		"top": top,
+		"left": ($(window).width() / 2) - (width / 2)
+		}
+	}
+
+function price_append(){
+        var data = {};
+         $.ajax({
+            url:"/api/rental/price",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                  var temp = "";
+						
+					$.each(res.rows,function(index,data){
+							data.price =  parseFloat(data.price).toFixed(2);
+							temp += '<option value="'+data.price+'">'+data.price+' USD /'+data.unit+'</option>'      
+					})
+
+				//	$(".price").append(temp);
+			$("select[name=price]").append(temp);
+							
+            },
+            error:function(res){
+              alert('server error occured');
+            }
+        });//end ajax
+    } //function
+
+
+
+
+	});
+</script>

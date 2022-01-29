@@ -1,0 +1,284 @@
+<div class="card">
+    <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"></i>{{translation.Exp_Expense_Categories}}</h4>
+                <span class="text-pink m-l-30">{{translation.Exp_Expense_Categories_Management}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/expenses">
+                    <h5><i class="feather icon-arrow-left"></i> {{translation.Exp_Back_toExpense}}</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+
+    <div class="card-block">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="nestable-menu">
+                    <button type="button" id="btnSwitch" class="btn btn-inverse btn-sm" data-toggle="modal" data-target="#modal-category">
+                        <a href="#" style="color: #ffffff;">
+                            <i class="feather icon-plus-circle" ></i> {{translation.Exp_New_Categories}}
+                        </a>
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-action="collapse-all"><i class="feather icon-plus"></i> {{translation.Exp_Collapse_All}}</button>
+                    <button type="button" class="btn btn-info btn-sm waves-effect waves-light" data-action="expand-all"><i class="feather icon-minus"></i>{{translation.Exp_Expand_All}}</button>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+           
+ <div class="cf nestable-lists">
+                    <div class="drag_disabled dd" id="nestable">
+
+                    </div>
+            </div>
+           
+<!--Modal original-->
+<div class="modal fade" id="modal-category" tabindex="-1" role="dialog" aria-labelledby="modalLabel" style="display: none;" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header p-2">
+                    <h5 class="modal-title" id="modalLabel"><i class="feather icon-file-plus"></i>{{ translation.Exp_Add_Categories}}</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-12 col-form-label">{{translation.Exp_Parent}}</label>
+                                <div class="col-sm-12">
+                                    <select id="select2-category" class="single_search_select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                        <option value="0">{{translation.Exp_Choose_Parent}}</option>
+                    
+                                    </select>
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-12 col-form-label text-danger">{{translation.Exp_Name}}</label>
+                                <div class="col-sm-12">
+                                    
+                                    <input type="hidden" class="form-control" id="id"  name="id">
+                                    <input type="text" class="form-control" id="name" name="name">
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer p-1 text-center" style="display: table-cell; border: none;" id="btnform">
+                    <button type="button" class="btn btn-default close_btn" data-dismiss="modal" id="btnClose">{{translation.Exp_Close}}</button>
+                    
+                    <button type="button" class="save_btn btn btn-inverse" id="btnSave">{{translation.Exp_Save}}</button>  
+                    <button type="button" class="save_btn btn btn-inverse" id="btnUpdate">{{translation.Exp_Cat_Edit}}</button>  
+                </div>
+            </div>
+        </div>
+</div>
+<script>
+    $(document).ready(function() {
+            $("#btnSwitch").click(function(){
+                $("#btnUpdate").hide();
+                $("#btnSave").show();
+            })
+            categories();
+            append_category();
+            button_save();
+            
+        $(document).on('click','#btnEdit',function(){
+            function getUrlParameter(sParam) {
+           var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+            for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+        return false;
+    }
+                $('#modalLabel').html("<i class='feather icon-file-plus'></i>{{translation.Exp_Edit_Categories}}");
+                $("#btnSave").hide();
+                $("#btnUpdate").show();
+
+                 //var id =getUrlParameter('id');
+                 var id = $(this).attr('name');
+                alert(id)
+                var data={};
+                    $.ajax({
+                    url: '/api/categories/edit/'+id, 
+                    type: 'GET',
+                    dataType:'json',
+                    data: JSON.stringify(data),
+                    success: function(res) {
+                       console.log(res)
+                        $.each(res.rows,function(key,data){
+                            // console.log("p_",data.p_id,data.p_name,"|","c_",data.c_id,data.c_name);
+                          
+                            if(data.c_id==id){
+                                $("#name").val(data.c_name);
+                                $("#select2-category").append('<option value="'+data.p_id+'" selected>'+data.p_name+'</option>');
+                            }
+                            if(data.p_id==id){
+                                $("#select2-category").append('<option value="'+data.p_id+'" selected>'+data.p_name+'</option>');
+                            }
+                            
+                        })
+                    },
+                    error: function(res){
+                    alert("cannot get because have some error");
+                    }
+                });//end_ajax
+             
+                    $("#btnUpdate").click(function(err){
+                     
+                        var id = $("#id").val();
+                        var name = $("#name").val();
+                        var parent_id =$("#select2-category").find(":selected").val();                 
+                        $.ajax({
+                            url:"/api/categories/update",
+                            method:"POST",
+                            dataType: "json",
+                            data:{
+                                'id': id,
+                                'name': name,
+                                'parent_id':parent_id
+                            },
+                            success:function(res){
+                                   // console.log(res)
+                                    $("#name").val('');
+                            },
+                            error:function(response){
+                                alert('server error occured');
+                            } 
+                        });
+                         window.location.reload();
+                    });//buton update
+                   
+        });//end_document_edit
+        $(document).on('click','#btnDelete',function(){
+                var id = $(this).attr('name');
+                //alert(id)
+                var data={};
+                $.ajax({
+                    url: '/api/categories/deleted/'+id, 
+                    type: 'GET',
+                    dataType:'json',
+                    data: JSON.stringify(data),
+                    success: function(res) {
+                        if(res.msg == "success"){
+
+                            makeNestableListUsingJSONArray(res.rows);
+                            dropdown_select();
+                        }
+                    },
+                    error: function(res){
+                    alert("cannot get because have some error");
+                    }
+                });//end_ajax
+        });//end_document btnDelete
+
+            function makeNestableListUsingJSONArray(jsonArray, root) {
+                if (typeof root === 'undefined') {
+                    root = $('#nestable');
+                }
+                var $div = $("<ol class='dd-list' id='dd-list'></ol>");
+                root.append($div);
+
+                for (var i = 0; i < jsonArray.length; i++) {
+                    var $li = $(" <li class='dd-item' data-id='" + jsonArray[i].text.id + "'>" +
+                                " <span class='f-right m-l-10 m-r-10 m-t-5'><a href='categories?deleted="+jsonArray[i].text.id+"' type='button' id='btnDelete' name='"+jsonArray[i].text.id+"'><i class='icofont icofont-ui-delete'></i></a></span>" +
+                                " <span class='f-right m-t-5'><a href='"+ jsonArray[i].text.id +"' name='"+jsonArray[i].text.id+"' type='button' id='btnEdit'  data-toggle='modal' data-target='#modal-category'><i class='icofont icofont-ui-edit'></i></a></span>" +
+                                " <div class='dd-handle'>"+jsonArray[i].text.name +"</div></li>");
+                    root.find('ol.dd-list:first').append($li);
+
+                    if (typeof jsonArray[i].children != 'undefined') {
+                    makeNestableListUsingJSONArray(jsonArray[i].children, $li);
+
+                    }
+                }
+            }
+            function append_category(){
+        var data={}
+        $.ajax({
+            url:"/api/categories/nestable",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+    
+                    makeNestableListUsingJSONArray(res.rows);
+                    dropdown_select();
+            }
+        });//end ajax
+    }
+    });//end_document ready
+    function button_save(){
+        $("#btnSave").click(function(){
+      
+            var name = $("#name").val();
+            var parent_id =$("#select2-category").find(":selected").val();
+            $.ajax({
+                url:"/api/categories/add",
+                method:"POST",
+                dataType: "json",
+                data:{
+                    'name': name,
+                    'parent_id':parent_id
+                },
+                success:function(res){
+                        $("#name").val('');
+                        window.location.reload();
+                },
+                error:function(response){
+                    alert('server error occured');
+                }
+            });
+        });//btnSave 
+    }
+    
+    function dropdown_select(){
+        /*fix to display over modal*/
+        $('#select2-category').select2({
+            theme: "classic",
+            dropdownParent: $('#modal-category')
+        });
+        $('#nestable').nestable();
+        $('#nestable-menu').on('click', function(e) {
+            var target = $(e.target),
+                action = target.data('action');
+            if (action === 'expand-all') {
+                $('.dd').nestable('expandAll');
+            }
+            if (action === 'collapse-all') {
+                $('.dd').nestable('collapseAll');
+            }
+        });
+    }//end_fun_dropdown_select_option
+    function categories(){
+       var data={};
+        $.ajax({
+           url:"/api/expenses/category",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                var temp = "";
+                    $.each(res.rows,function(index,data){
+                        temp += '<option value="'+data.id+'">'+data.name+'</option>'    
+                    })
+                    $("#select2-category").append(temp);
+            },
+            error:function(res){
+              alert('server error occured');
+            }
+        });//end ajax 
+    }
+</script>

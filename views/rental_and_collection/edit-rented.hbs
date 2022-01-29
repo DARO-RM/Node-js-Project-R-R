@@ -1,0 +1,561 @@
+<div class="card">
+    <div class="card-header tab-icon p-b-0">
+        {{> nav_rental_collection }}
+        <div class="row p-t-10">
+            <div class="col-md-6">
+                <h3 id="roomName"><i class="feather icon-user-plus"></i></h3>
+                <span class="text-pink m-l-30">{{ translation.Rental_Required}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/rental/rented">
+                    <h5><i class="feather icon-arrow-left"></i> {{translation.Rental_Back_to_Rental}}</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+  <form action="" name="registration" id="registration">
+    <div class="card-block">
+        <div class="row">
+            <div class="col-12">
+               <h4><i class="feather icon-home"></i> {{ translation.Rental_Rental}}</h4>
+                <hr/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="col-sm-12 text-danger">{{translation.Rental_Room_Name}}</label>
+                    <div class="col-sm-12">
+                        <select name="room_floor" id="roomname" class="form-control">
+                            <option value="0">Choose Rooms</option>
+                            {{!-- <option value="opt1" selected>R-1005</option>
+                            <option value="opt2">R-1006</option>
+                            <option value="opt3">R-10008</option> --}}
+                        </select>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="col-sm-12 text-danger">{{ translation.Rental_Tanent_Name}}</label>
+                    <div class="col-sm-12">
+                        <select name="tanentname" id="tanentname" class="form-control">
+                            <option value="0" >Choose Tanent</option>
+                            {{!-- <option value="opt1" selected>Sok Dara</option>
+                            <option value="opt2">Virak Soa</option>
+                            <option value="opt3">Chan Bopha</option> --}}
+                        </select>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <div class="row">
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">{{ translation.Rental_Rent_Date}}</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" name="rental_date" id="rental_date" placeholder="">
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                      <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">{{translation.Rental_Check_In}}</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control"  name="checked_in" id="checked_in" placeholder="">
+                            <span class="messages"></span>
+                        </div>
+                    </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group row">
+                    <label class="col-sm-12 col-form-label">{{ translation.Rental_Deposit}}</label>
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="deposite" id="deposite" placeholder="">
+                            <div class="input-group-prepend bg-inverse">    
+                                <span class="input-group-text m-3"><label class="m-t-10">$</label></span>
+                            </div>
+                        </div>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group row">
+                    <label class="col-sm-12 col-form-label text-danger">{{ translation.Rental_Room_Fee}}</label>
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="room_fee" id="room_fee" placeholder="">
+                            <div class="input-group-prepend bg-inverse">    
+                                <span class="input-group-text m-3"><label class="m-t-10">$ / Month</label></span>
+                            </div>
+                        </div>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+               <h4><i class="feather icon-settings"></i> {{ translation.Rental_Utilities}}</h4>
+                <hr/>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="col-sm-12 col-form-label text-danger">{{ translation.Rental_Old_Water_Number}}</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" name="pre_water" id="pre_water" placeholder="">
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="col-sm-12 col-form-label text-danger">{{ translation.Rental_Old_Eletric_Number}}</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" name="pre_electric" id="pre_electric" placeholder="">
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="col-sm-12 col-form-label text-danger">{{ translation.Rental_A_Unit_of_Water_Fee}}</label>
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="water_fee" id="water_fee" placeholder="" value="">
+                            <div class="input-group-prepend bg-inverse">    
+                                <span class="input-group-text m-3"><label class="m-t-10">$ / M3</label></span>
+                            </div>
+                        </div>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="col-sm-12 col-form-label text-danger">{{ translation.Rental_A_Unit_of_Electric_Fee}}</label>
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="electric_fee" id="electric_fee" placeholder="" value="">
+                            <div class="input-group-prepend bg-inverse">    
+                                <span class="input-group-text m-3"><label class="m-t-10">$ / KW</label></span>
+                            </div>
+                        </div>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+               <h4><i class="feather icon-info"></i> {{ translation.Rental_Services}}</h4>
+               <h4 class="m-l-30" id="total_service"><i class="feather icon-USD"></i> {{ translation.Rental_Total}} 80.00 USD</h4>
+                <hr/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="table-responsive">
+                    <table class="table table-xs table-bordered f-14" id="service">
+                        <tr>
+                            <th class="col-3 col-lg-6 col-xl-6">{{ translation.Rental_Name}}</th>
+                            <th class="text-center">{{ translation.Rental_Price}}</th>
+                            <th class="text-center">{{ translation.Rental_Qty}}</th>
+                            <th class="text-center">{{ translation.Rental_Totals}}</th>
+                        </tr>
+                        {{!-- <tr>
+                            <td>
+                                <div class="checkbox-fade fade-in-primary">
+                                    <label>
+                                        <input type="checkbox" value="" checked>
+                                        <span class="cr">
+                                            <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                        </span>
+                                        <span>{{ translation.Rental_Car_Parking}}</span>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group" style="margin-bottom: 0em;">
+                                    <input type="text" class="form-control" name="deposit" placeholder="" value="20">
+                                    <div class="input-group-prepend bg-inverse">    
+                                        <span class="input-group-text m-2"><label class="m-t-10">$</label></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" value="1">
+                            </td>
+                            <td>
+                                <div class="input-group" style="margin-bottom: 0em;">
+                                    <input type="text" class="form-control" name="deposit" placeholder="" value="20">
+                                    <div class="input-group-prepend bg-inverse">    
+                                        <span class="input-group-text m-2"><label class="m-t-10">$</label></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr> --}}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="old_room_id" value="">
+
+        <div class="form-group row">
+            <label class="col-sm-2"></label>
+            <div class="col-sm-10 text-right">
+              <button  id="cancel"  class="btn btn-danger m-b-0">{{translation.Cancel}}</button>
+              <button id="submit" type="submit" class="btn btn-inverse m-b-0">{{ translation.Submit}}</button>
+            </div>
+        </div>
+</form>
+
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+$("#cancel").click(function(){
+    history.pushState('/rental/rented/', '','/rental/rented');
+    location.reload(); 
+})//end cancel
+    get_rented();
+    var form = $("#registration");
+    form.on("submit", function (event) {
+
+        if(!form.valid()) {
+            return false; 
+        }
+        event.preventDefault();  
+
+        var id = getUrlParameter('id');
+    
+        var data_ajax={};
+        data_ajax.old_room_id =  $("#old_room_id").val();
+        data_ajax.room_id = $('#roomname').find(":selected").val();
+        data_ajax.customer_id = $('#tanentname').find(":selected").val();
+        data_ajax.rental_time =  $("#rental_date").val();
+        data_ajax.checked_in =  $("#checked_in").val();
+        data_ajax.deposite_price =  $("#deposite").val();
+        data_ajax.room_price = $("#room_fee").val();
+
+        data_ajax.utility_id = "1,2";
+            var pre_electric = $("#pre_electric").val();
+            var pre_water = $("#pre_water").val();
+
+        data_ajax.utility_pre_qty = pre_electric + "," + pre_water;
+            var water_price = $("#water_fee").val();
+            var electric_price = $("#electric_fee").val();
+        data_ajax.utility_price = electric_price + "," + water_price;
+
+
+           
+           var service_price =  "";
+           var service_qty =   "";
+           var service_total =  "";
+
+           var service_id="";
+           
+          $('#service :checked').each(function(i){
+              service_id += $(this).val() + "," 
+          })
+
+          var service_check = service_id.split(',');   
+     
+          for(var i=0 ; i< service_check.length - 1 ; i++){
+              
+              var pos_price = '.'+service_check[i]+ ' td [name=price]';
+              var pos_qty  = '.'+service_check[i]+' td [name=qty] ';
+              var pos_total  = '.'+service_check[i]+' td [name=total] ';
+
+              service_price += $(pos_price).val()+',';
+              service_qty += $(pos_qty).val()+',';
+              service_total += $(pos_total).val()+',';
+          }
+           
+        data_ajax.service_id = service_id;
+        data_ajax.service_qty = service_qty;
+        data_ajax.service_price = service_price;
+        data_ajax.service_total = service_total;
+
+              
+              $.ajax({
+                    url:"/api/rental/rented/edit/"+id,
+                    method:"POST",
+                    dataType:"json",
+                    data:data_ajax,
+                    success:function(res){
+
+                        new PNotify({
+                            title: 'Edit Success',
+                            icon: 'icofont icofont-info-circle',
+                            type: 'success',
+                            delay: 500,
+                            after_close:function(){         
+                                history.pushState('/rental/rented/add', '','/rental/rented');
+                                location.reload(); 
+                            }
+                        });        
+
+                    },
+                    error:function(err){
+                      alert('server error occured');
+                    }
+                }) //end ajax
+    })
+
+
+
+
+function get_rented(){
+
+    var id = getUrlParameter('id');
+    var data = {};   
+
+          $.ajax({
+            url: '/api/rental/rented/edit/'+id, 
+            type: 'GET',
+            contentType: 'application/json', 
+            data: JSON.stringify(data),
+            success: function(res){
+               
+              var data = res.rows[0];
+            
+
+                
+                $("#pre_electric").val(data.electric_pre);
+                $("#pre_water").val(data.water_pre);
+                $("#water_fee").val(data.water_fee);
+                $("#electric_fee").val(data.electric_fee);    
+                
+                    
+                if(data.rentDate != ''){
+                    $("#rental_date").val(data.rentDate);
+                    $("#rental_date").val(data.rentDate);
+                    $('#rental_date').daterangepicker({
+                        "singleDatePicker": true,
+                        "showDropdowns": true,       
+                        "autoUpdateInput": true,
+                        "value":data.visa_number_expire
+                    });
+                }
+                
+                if(data.checked_in != ''){
+                    $("#checked_in").val(data.checked_in);
+                    $("#checked_in").val(data.checked_in);
+                    $('#checked_in').daterangepicker({
+                        "singleDatePicker": true,
+                        "showDropdowns": true,       
+                        "autoUpdateInput": true,
+                        "value":data.visa_number_expire
+                    });
+                } 
+
+           
+                $("#deposite").val(data.deposite_price);
+                $("#room_fee").val(data.price);
+         
+
+                customer_append(data.customer_id);
+                room_append(data.room_id);
+
+                var ser_id = data.service_id.split(",");
+                var ser_name = data.service_name.split(",");
+                var ser_qty = data.service_qty.split(",");
+                var ser_price = data.service_price.split(",");
+                var ser_total = data.service_total.split(",");
+                var check = data.service_check.split(",");
+
+                //console.log(ser_id,ser_name,ser_qty,ser_price,ser_total,check);
+             
+                service_append(ser_id ,ser_name,ser_qty,ser_price,ser_total,check);
+
+              
+             
+            }
+          });//end ajax
+ 
+
+
+}
+
+function service_append(service_id,service_name,service_qty,service_price,service_total,service_check){
+
+
+                var temp = "";
+                for(var i in service_id){
+                        temp += ' <tr class='+service_id[i]+'>'+
+                                '       <td> '+
+                                '           <div class="checkbox-fade fade-in-primary"> '+
+                                '               <label> '+
+                                '                   <input type="checkbox" id="service" value="'+service_id[i]+'"> '+
+                                '                   <span class="cr">'+
+                                '                       <i class="cr-icon icofont icofont-ui-check txt-primary"></i> '+
+                                '                   </span> '+
+                                '                   <span>'+service_name[i]+'</span>'+
+                                '               </label>'+
+                                '           </div>'+
+                                '       </td>'+
+                                '       <td>'+
+                                '           <div class="input-group" style="margin-bottom: 0em;">'+
+                                '               <input type="text" class="form-control" name="price" placeholder="" value="'+service_price[i]+'">'+
+                                '               <div class="input-group-prepend bg-inverse">  '+ 
+                                '                   <span class="input-group-text m-2"><label class="m-t-10">$</label></span>'+
+                                '               </div>'+
+                                '           </div>'+
+                                '       </td>'+
+                                '       <td>'+
+                                '           <input name="qty" type="text" class="form-control" value="'+service_qty[i]+'">'+
+                                '       </td>'+
+                                '       <td>'+
+                                '           <div class="input-group" style="margin-bottom: 0em;">'+
+                                '               <input type="text" class="form-control" name="total" placeholder="" value="'+service_total[i]+'">'+
+                                '               <div class="input-group-prepend bg-inverse"> '+ 
+                                '                   <span class="input-group-text m-2"><label class="m-t-10">$</label></span>'+
+                                '               </div>'+
+                                '           </div>'+
+                                '       </td>'+
+                                '   </tr>';
+                    }
+
+                    $("#service").append(temp);
+
+                if(service_check.length!=0){
+                    for(var i in service_check){
+                       $('#service Input[value="'+service_check[i]+'"]').attr('checked', true);
+                    }
+                }
+                    
+      
+}
+function customer_append(customer_id){
+    var data = {};
+    try{
+         $.ajax({
+            url:"/api/rental/rented/customer",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+
+                var temp = "";
+          
+                    var electric_price;
+                    var water_price;
+                    $.each(res.rows,function(index,data){
+                      temp += ' <option value="'+data.cus_id+'">'+data.customer_name+'</option>'
+                    })
+            
+                    //append hear
+                    $("#tanentname").append(temp);
+                    $("#tanentname").val(customer_id);
+            },
+            error:function(res){
+              alert('server error occured');
+            }
+        });//end ajax
+
+
+    }catch(error){
+        console.error(error);
+    }  
+} //function
+function room_append(room_id){
+    var data = {};
+    try{
+         $.ajax({
+            url:"/api/rental/rented/room/"+room_id,
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                  
+                var temp = "";
+                    var electric_price;
+                    var water_price;
+                    $.each(res.rows,function(index,data){
+                      temp += '<option value="'+data.id+'">'+data.name+'</option>';
+                    })
+                    //append hear
+                    $("#roomname").append(temp);
+                    $("#roomname").val(room_id);
+                    $("#old_room_id").val(room_id);
+                 
+            },
+            error:function(res){
+              alert('server error occured');
+            }
+        });//end ajax
+
+
+    }catch(error){
+        console.error(error);
+    }  
+} //function
+  
+
+
+ 
+  
+  
+function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split('=');
+
+          if (sParameterName[0] === sParam) {
+              return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+          }
+       }
+    return false;
+   }//end function 
+})//end jquery
+</script>
+
+{{!-- $('input[name="rental_date"]').daterangepicker({
+            "singleDatePicker": true,
+            "showDropdowns": true,       
+            "autoUpdateInput": false,
+})
+$('input[name="rental_date"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('MM/DD/YYYY'));
+});
+
+$('input[name="checked_in"]').daterangepicker({
+            "singleDatePicker": true,
+            "showDropdowns": true,       
+            "autoUpdateInput": false,
+})
+
+$('input[name="checked_in"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('MM/DD/YYYY'));
+}); --}}

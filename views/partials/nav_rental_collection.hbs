@@ -1,0 +1,50 @@
+<ul class="nav nav-tabs md-tabs" style="border-bottom: none !important;margin-top: -2em;">
+    <li class="nav-item">
+        <a class="nav-link m-r-5" id="rental"  href="/rental">
+            <button class="btn btn-lg btn-block m-b-0"><i class="icofont icofont-check-circled"></i>{{ translation.Rental_Available}}</button>
+        </a>
+        <div class="slide m-r-20"></div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link m-r-5" id="booked" href="/rental/booked">
+            <button id="btnrental" class="btn btn-lg btn-block m-b-0"><i class="icofont icofont-check-circled"></i>{{ translation.Booked}}</button>
+        </a>
+        <div class="slide"></div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link m-r-5" id="rented" href="/rental/rented">
+            <button class="btn btn-lg btn-block m-b-0"><i class="icofont icofont-check-circled"></i>{{ translation.Rented}}</button>
+        </a>
+        <div class="slide"></div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link m-r-5" id='collection'  href="/rental/collection">
+            <button class="btn btn-lg btn-block m-b-0"><i class="icofont icofont-check-circled"></i>{{ translation.Collection}}</button>
+        </a>
+        <div class="slide"></div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link m-r-5" id='payment'  href="/rental/payment">
+            <button class="btn btn-lg btn-block m-b-0"><i class="icofont icofont-check-circled"></i>{{ translation.Payment}}</button>
+        </a>
+        <div class="slide"></div>
+    </li>
+</ul>
+
+
+<script>
+    $("document").ready(function(){
+
+         var currLoc = $(location).attr('href');
+         var lenght_route = currLoc.length; 
+         var cut_from = currLoc.lastIndexOf('/'); 
+         var activeID =  currLoc.substring(cut_from+1,lenght_route);
+
+        if(activeID.length < 3){
+            $('#rental').addClass('active');
+        }else{
+            $('#'+activeID).addClass('active');
+        }
+   
+    })
+</script>

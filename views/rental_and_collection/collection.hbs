@@ -1,0 +1,374 @@
+<div class="card">
+	<div class="card-body tab-icon">
+        {{> nav_rental_collection }}
+        <div class="row">
+			<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>{{ translation.Collection_Photo}}</th>
+						<th>{{ translation.Collection_Customer}}</th>
+						<th>{{ translation.Collection_Room_Service}}</th>
+						<th>{{ translation.Collection_Utility_Used}}</th>
+						<th>{{ translation.Collection_Total}}</th>
+						<th class="text-center color-warning">{{ translation.Collection_Billing_Form}}</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">	
+delay(get_rented_room(),500);
+
+function get_rented_room()
+{
+	var data = {};        
+	try{
+		$.ajax({
+			url: '/api/rental/rented/view',       
+			type: 'GET',
+			contentType: 'application/json', 
+			data: JSON.stringify(data),
+			success: function(res) {
+				if(res.rows.length>0){
+				var temp = "" ;
+				$.each(res.rows,function(index,data){
+					data.water_fee = parseFloat(data.water_fee).toFixed(2);
+					data.electric_fee = parseFloat(data.electric_fee).toFixed(2);
+					data.roomFee = parseFloat(data.roomFee).toFixed(2);
+					data.service_total = parseFloat(data.service_total).toFixed(2);
+				    data.total = parseFloat(data.total).toFixed(2);
+					data.water_pre = parseFloat(data.water_pre).toFixed(2);
+					data.electric_pre = parseFloat(data.electric_pre).toFixed(2);
+					temp +=' <tr class="'+data.rental_id+'">'+
+						'   <td><img src="/assets/images/product-list/pro-l1.png" class="img-fluid"></td>'+
+						'   <td>'+
+						'	<input type="hidden" class="rental_id" name="rental_id[]" value="'+data.rental_id+'">'+
+						'	<span>{{ translation.Collection_Room}}'+data.roomName+'</span>'+
+						'	<br/>'+
+						'	<span>'+data.fullname+'</span>'+
+						'	</td>'+
+						'   <td>'+
+						'	<span>{{ translation.Collection_Room}} '+data.roomFee+' USD</span>'+
+						'	<br/>'+
+						'	<span>{{ translation.Collection_Service}} '+data.service_total+' USD</span>'+
+						'	<input type="hidden" class="service_total" value="'+data.service_total+'">'+
+						'	<input type="hidden" id="old_water_amount'+data.rental_id+'" class="water_pre" value="'+data.water_pre+'">'+
+						'	<input type="hidden" id="old_electric_amount'+data.rental_id+'" class="electric_pre" value="'+data.electric_pre+'">'+
+						'	<input type="hidden" id="waterPrice'+data.rental_id+'" value="'+data.water_fee+'">'+
+						'	<input type="hidden" id="electricPrice'+data.rental_id+'" value="'+data.electric_fee+'">'+
+						'	<input type="hidden" style="width: 70px;" id="store_Water_paid'+data.rental_id+'" name="store_Water_paid" >'+
+						'	<input type="hidden" style="width: 70px;" id="store_Electric_paid'+data.rental_id+'" name="store_Electric_paid">'+
+						'	<input type="hidden" style="width: 70px; " id="tatol_amount'+data.rental_id+'" value="'+data.total+'">'+
+						'	</td>'+
+						'       <td>'+
+						'       <span><i class="icofont icofont-check-circled">Water:<input type="text" onclick="this.focus();this.select()" style=" border: none; text-align: center;width: 70px;"id="total_Water_used'+data.rental_id+'" autocomplete="off" readonly="readonly"/></i>{{translation.Collection_Water}} '+data.water_pre+'M3;{{ translation.Collection_Totals}}'+data.water_fee+'USD</span>'+
+						'       <br/>'+
+						'       <span><i class="icofont icofont-check-circled">Electric:<input type="text" onclick="this.focus();this.select()" style="border:none;text-align: center;width:62px;" id="total_Electric_used'+data.rental_id+'" autocomplete="off" readonly="readonly"/></i>{{translation.Collection_Electric}} '+data.electric_pre+'KW;{{ translation.Collection_Totals}}'+data.electric_fee+'USD</span>'+
+						'       </td>'+
+						'		<td><input type="text" style="border: none; width:70px; text-align: center;" id="total_paid'+data.rental_id+'"readonly="readonly"/>USD</td>'+
+						'       <td>'+
+						'		<form>'+
+						'			<div class="col-md-12">'+
+						'				<div class="row">'+
+						'						<div class="col-md-6 m-0 p-0">'+
+						'							<div class="form-group row m-0">'+
+						'								<label class="col-sm-4 col-form-label">{{translation.Collection_Date}}</label>'+
+						'								<div class="col-sm-8">'+
+						'									<input type="text" class="form-control-reverse col-12 collection_date" placeholder="Collection Date" name="collection_date"  >'+
+						'									</div>'+
+						'								</div>'+
+						'								<div class="form-group row m-0">'+
+						'									<label class="col-sm-3 col-form-label">{{ translation.Collection_Back_Date}}</label>'+
+						'									<div class="col-sm-8">'+
+						'										<div class="p-2">'+
+						'											<input type="checkbox" class="form-control-reverse col-12" value="">'+
+						'										</div>'+
+						'									</div>'+
+						'								</div>'+
+						'							</div>'+
+						'							<div class="col-md-6 m-0 p-0">'+
+						'								<div class="form-group row m-0">'+
+						'									<label class="col-sm-4 col-form-label">{{ translation.Collection_Water}}</label>'+
+						'									<div class="col-sm-8">'+
+						'										<input type="text" onclick="this.focus();this.select()" class=" form-control-reverse col-12" id="new_water_amount'+data.rental_id+'" name="New_water" placeholder="New Water" >'+
+						'									</div>'+
+						'								</div>'+
+						'								<div class="form-group row m-0">'+
+						'									<label class="col-sm-4 col-form-label">{{ translation.Collection_Electric}}</label>'+
+						'									<div class="col-sm-8">'+
+						'										<input type="text" onclick="this.focus();this.select()"  class="form-control-reverse col-12" id="new_electric_amount'+data.rental_id+'" name="New_electric" placeholder="New Electric">'+
+						'									</div>'+
+						'								</div>'+
+						'								<div class="form-group row m-0">'+
+						'									<label class="col-sm-1 col-form-label">'+
+						'									</label>'+
+						'									<div class="col-sm-11">'+
+						'							<div class="btn-group dropdown-split-inverse">'+
+						'                           <button type="button" class="btn btn-inverse btn_invoice btn-sm col-10" style="font-size: 14px;">'+
+						'                           <i class="icofont icofont-check-circled">'+
+						'                          {{ translation.Collection_Invoice}} '+
+						'                          </i>' +
+						'                           </button>'+
+						'							<button href="" type="button" class="btn btn-inverse btn-sm col-2 dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+						'										<span class="sr-only">Toggle primary</span>'+
+						'									</button>'+
+						'									<div class="dropdown-menu" style="will-change: transform;">'+
+						'										<a class="dropdown-item waves-effect waves-light" href="">{{translation.Collection_Payment_List}}</a>'+
+						'									</div>'+
+						'							      </div>'+
+						'								</div>'+
+						'							</div>'+	
+						'						</div>'+
+						'					</div>'+
+						'				</div>'+
+						'		</form>'+
+						'       </td>'+
+						'    </tr> ';
+				});
+					$("tbody").html(temp);
+					$('input[name="collection_date"]').daterangepicker({
+							singleDatePicker: true,
+							showDropdowns: true,
+							locale: {
+								format:'DD-MM-YYYY'
+							}
+					},
+					function(start, end, label) {
+							var years = moment().diff(start, 'years');
+					});
+					
+				}else{
+					$("#tbody").empty().fadeIn();
+				}
+				$(document).ready(function(){
+					const  rental_id = $(".rental_id").map(function(){
+						return $(this).val();
+					});
+					$.each(rental_id, function(index, id) {
+						var old_water_amount = $('#old_water_amount'+id).val();
+						var old_electic_amount = $('#old_electric_amount'+id).val();
+						var waterPrice = $('#waterPrice'+id).val();
+						var electricPrice= $('#electricPrice'+id).val();
+						var total_amount= $('#tatol_amount'+id).val();
+						$('#new_water_amount'+id).on('change', function() {
+							var new_water_amount = $(this).val();
+							if(parseFloat(new_water_amount) < parseFloat(old_water_amount))
+							{
+								alert('New Number input can not smaller than old water number '+ old_water_amount +' !');
+								$('#new_water_amount'+id).val('');
+							}
+							var total_water_used = parseFloat(new_water_amount) - parseFloat(old_water_amount);
+								$('#total_Water_used'+id).val(total_water_used);
+								var total_water_paid = parseFloat(total_water_used) * parseFloat(waterPrice);
+								$('#store_Water_paid'+id).val(total_water_paid.toFixed(2));
+							
+								var total_electric_paid = $("#store_Electric_paid"+id).val();
+							    var total_paid = parseFloat(total_amount) +parseFloat(total_electric_paid)+ parseFloat(total_water_paid);
+							
+							$('#total_paid'+id).val(total_paid.toFixed(2));
+						});
+						$('#new_electric_amount'+id).on('change', function() {
+								var new_electric_amount = $(this).val();
+								if(parseFloat(new_electric_amount) < parseFloat(old_electic_amount))
+								{
+									alert('New Number input can not smaller than old electric number '+ old_electic_amount +' !');
+									$('#new_electric_amount'+id).val('');
+								}
+								var total_electric_used = parseFloat(new_electric_amount) - parseFloat(old_electic_amount);
+								    $('#total_Electric_used'+id).val(total_electric_used);
+								var total_electric_paid = parseFloat(total_electric_used) * parseFloat(electricPrice);
+								  
+									$('#store_Electric_paid'+id).val(total_electric_paid.toFixed(2));
+							        var total_water_paid = $('#store_Water_paid'+id).val();
+							        // console.log("total_electric_paid"+total_electric_paid);
+                               
+                                    var total_paid = parseFloat(total_amount) +parseFloat(total_electric_paid)+ parseFloat(total_water_paid);
+							     
+                              	    $('#total_paid'+id).val(total_paid.toFixed(2));
+								
+							});
+			     	});
+				});
+			}//end sucess
+		}); 
+	}catch (error) {
+		console.error(error);
+	}
+}
+
+
+
+ $(document).on('click','.btn_invoice',function(){
+
+		var id = $(this).attr('name');
+		var new_water = $("."+id+" .new_water").val();
+	    var new_electric  =  $("."+id+" .new_electric").val();
+
+		if( new_water == "" && new_electric == "" ){
+
+				new PNotify({
+							title: 'Please enter Electric Number and Water Number',
+							icon: 'icofont icofont-info-circle',
+							type: 'error',
+							hide:'false',
+							width: '35%',
+							confirm: { confirm: true },
+							after_close:function(){
+								$("."+id+" .new_water").css({'background-color':'#D8D8D8'});
+								 $("."+id+" .new_electric").css({'background-color':'#D8D8D8'});
+								return;
+							}
+					})
+		
+
+		}else if(new_water=="" && new_electric != ""){
+
+				new PNotify({
+						title: 'Please enter Water Number.',
+						icon: 'icofont icofont-info-circle',
+						type: 'error',
+						hide:'false',
+						width: '25%',
+						confirm: { confirm: true },
+						after_close:function(){
+									return;
+						}
+				})
+
+		}else if( new_water != "" && new_electric == ""){
+			
+				new PNotify({
+						title: 'Please enter Electric Number.',
+						icon: 'icofont icofont-info-circle',
+						type: 'error',
+						hide:'false',
+						width: '25%',
+						confirm: { confirm: true },
+						after_close:function(){
+							return;
+						}
+				})
+
+		}else{
+
+			var old_water = $("."+id+" .water_pre").val();
+			var old_electric = $("."+id+" .electric_pre").val();
+		
+			var water_price = $("."+id+" .water_fee").val();
+			var electric_price = $("."+id+" .electric_fee").val();
+
+			var water_used =  parseFloat(new_water) - parseFloat(old_water);
+			var electric_used =  parseFloat(new_electric) - parseFloat(old_electric); 
+
+			var utility_price = (parseFloat(water_used)*parseFloat(water_price))+(parseFloat(electric_used)*parseFloat(electric_price));
+
+			var service_total  =  $("."+id+" .service_total").val();
+
+
+				if(water_used<0 && electric_used<0 ){
+					
+						new PNotify({
+								title: 'New number water cannot smaller than'+old_water+'New number electric cannot smaller than'+old_electric,
+								icon: 'icofont icofont-info-circle',
+								type: 'error',
+								hide:'false',
+								width: '40%',
+								confirm: { confirm: true },
+								after_close:function(){
+									return;
+								}
+						})
+
+				}else if(water_used>0  && electric_used<0 ){
+
+					new PNotify({
+								title: 'New number Electric cannot smaller than'+old_electric,
+								icon: 'icofont icofont-info-circle',
+								type: 'error',
+								hide:'false',
+								width: '35%',
+								confirm: { confirm: true },
+								after_close:function(){
+										return;
+								}
+						})
+
+				}else if(water_used<0  && electric_used>0 ){
+
+							new PNotify({
+								title: 'New number Water cannot smaller than'+old_water,
+								icon: 'icofont icofont-info-circle',
+								type: 'error',
+								hide:'false',
+								width: '35%',
+								confirm: { confirm: true },
+								after_close:function(){
+									return;
+								}
+						})
+
+
+				}else{
+
+					var data_ajax = {};
+
+					data_ajax.collection_time = $("."+id+" input[name='collection_date']").val();
+					data_ajax.service_price = service_total;
+					data_ajax.utility_price = utility_price;
+
+					data_ajax.water_last = new_water;
+					data_ajax.water_used = water_used;
+					data_ajax.water_price = water_price
+					data_ajax.water_total = parseFloat(water_used)*parseFloat(water_price);
+
+					data_ajax.electric_last = new_electric;
+					data_ajax.electric_used = electric_used;
+					data_ajax.electric_price = electric_price;
+					data_ajax.electric_total = parseFloat(electric_used)*parseFloat(electric_price);
+
+							
+								$.ajax({
+										url:"/api/rental/collection/add/"+id,
+										method:"POST",
+										dataType:"json",
+										data:data_ajax,
+										success:function(res){
+
+												new PNotify({
+														title: 'Add success',
+														icon: 'icofont icofont-info-circle',
+														type: 'success',
+														delay: 500,
+														after_close:function(){         
+															//history.pushState('/rental/rented/add', '','/rental/rented');
+																location.reload(); 
+														}
+												});        
+
+										},
+										error:function(response){
+											alert('server error occured')
+									}
+							}) //end ajax 
+				}
+		}
+
+ });
+
+ function delay(callback, ms) 
+	{
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+	} 
+</script>

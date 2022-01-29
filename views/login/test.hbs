@@ -1,0 +1,108 @@
+    <section class="login-block">
+    <!-- Container-fluid starts -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Authentication card start -->
+
+                <form class="md-float-material form-material">
+                    <div class="text-center">
+                         <img src="../../assets/images/complete.png" alt="Complete"> 
+                    </div>
+                    <div class="auth-box card">
+                        <div class="card-block">
+                            <div class="row m-b-20">
+                                <div class="col-md-12">
+                                    <h3 class="text-center">Log In</h3>
+                                </div>
+                            </div>
+                            <div class="form-group form-primary">
+                                <input type="text" name="username" id="username" class="form-control"  required="" placeholder="{{translation.acc_phone_number}}">
+                                <span class="form-bar"></span>
+                            </div>
+                            <div class="form-group form-primary">
+                                <input type="password" id="password" name="password" class="form-control"  required="" placeholder="{{translation.acc_password}}">
+                                <span class="form-bar"></span>
+                                
+                             {{#if (message)}}
+                                <div class="err-msg">{{message}}</div>
+                            {{/if}}
+
+                            </div>
+                            <div class="row m-t-30">
+                                <div class="col-md-12">
+                                    <button id="login_btn" type="submit" class="btn btn-primary btn-md btn-block waves-effect waves-light text-center m-b-20">{{translation.acc_login}}</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="text-inverse text-left m-b-0">{{translation.acc_Welcome_to}} POS</p>      
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+            {{!-- <ul>
+                <li>
+                    <!-- Modal small-->
+                   <!-- <button type="button" class="btn btn-success waves-effect" data-toggle="modal" data-target="#small-Modal">Small</button>-->
+                    <div class="modal fade" id="small-Modal" tabindex="-1" role="dialog" style="z-index: 1050; display: none;" aria-hidden="true">
+                        <div class="modal-dialog modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Require Permission </h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p style="color: red;"> You don't have enough permission to perform this action, please check.
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-inverse waves-effect " data-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul> --}}
+      
+
+
+	<button type="button" class="btn btn-inverse waves-effect" data-toggle="modal" data-target="#small-Modal">Small</button>
+    
+    <script>
+	$(document).ready(function(){
+       
+        var form = $(".form-material");
+        form.on("submit", function (event) {
+              
+             event.preventDefault();
+             var data_ajax = {};
+	
+            data_ajax.username = $('#username').val();
+            data_ajax.password = $('#password').val();
+           
+             $.ajax({
+                url:"/api/login",
+                method:"POST",
+                dataType: "json",
+                data:data_ajax,
+                success:function(res){
+                 
+                  location.href="/"
+                 
+                },
+                error:function(response){
+                    alert('Error occured')
+                     
+                }
+            }); //end ajax 
+        });
+	});
+</script>

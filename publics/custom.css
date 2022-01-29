@@ -1,0 +1,74 @@
+/* overwrite tabs style */
+.md-tabs .nav-item .nav-link.active~.slide {
+    opacity: 1;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    width: 24.6%;
+}
+
+.md-tabs .nav-item .nav-link~.slide {
+    opacity: 0;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    width: 24.6%;
+}
+
+@media only screen and (max-width: 573px) {
+    .nav-tabs .slide {
+        width: calc(98.5% / 1) !important
+    }
+}
+
+/* overwrite select2 style */
+/*
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #293141;
+    background-color: #FFFFFF;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #293141;
+}
+*/
+
+/* overwrite inputfile */
+.jFiler-theme-default .jFiler-input-button {
+    background-color: #293141;
+}
+
+/* overwrite edit-button on table*/
+.btn-edit {
+    margin-top:-0.5em; margin-left: -1.5em;
+}
+.btn-edit-dropdown {
+    margin-top:-0.5em; margin-left: -0.6em;
+}
+
+/* overwrite panel */
+.panel .border {
+    border: 1px solid #404e67;
+}
+
+/* orverwrite nestedtable */
+.dd {
+    max-width: 100%;
+}
+
+/* Validation */
+.error{
+ color: red;
+}
+
+/* overwrite sweetalter2 */
+.swal2-container.swal2-center>.swal2-popup {
+    border: 1px solid #ddd;
+}
+
+/* overwrite round button */
+.no-round-btn {
+    border-radius: 0px !important;
+}
+
+/*overwrite preloader3 */
+.preloading {
+   z-index:999999;
+}

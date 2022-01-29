@@ -1,0 +1,345 @@
+<form action="" name="registration" id="registration">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label text-danger">{{translation.First_Name}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Last_Name}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Full_Name}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Account_Number}}</label> 
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="account_number" name="account_number" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <label class="col-sm-2 col-form-label">{{translation.Sex}}</label>
+        <div class="col-sm-10">
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="sex" id="sex" value="male"> {{translation.Male}}
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="sex" id="sex" value="female"> {{translation.Female}}
+                </label>
+            </div>
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label text-danger">{{translation.Phone_Number_1}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="phone_1" id="phone_1" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Phone_Number_2}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="phone_2" name="phone_number2" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Email}}</label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control" id="email" name="email" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Facebook}}</label>
+        <div class="col-sm-10">
+            <input type="facebook" class="form-control" id="facebook" name="facebook" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Telegram}}</label>
+        <div class="col-sm-10">
+            <input type="telegram" class="form-control" id="telegram" name="telegram" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Work}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="work" id="work" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Company_Name}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="company_name" id="company_name" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Company_Address}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="company_address" name="company_address" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.National_number}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="national_number" name="national_number" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.National_Number_Expirer}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="national_number_expire" name="national_number_expire" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Visa_Number}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="visa_number" name="visa_number" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Visa_Expire}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="visa_number_expire" name="visa_number_expire" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Passport_Number}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="passport_number" name="passport_number" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Passport_Expire}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="passport_number_expire" id="passport_number_expire" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Address_1}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="address_1" name="address_1" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Address_2}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="address_2" name="address_2" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Date_of_Birth}}</label>
+        <div class="col-sm-10">
+            <input type="text" name="birthdate" id="dob" class="form-control"  >
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Age}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="age" id="age" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Places_of_Birth}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="pob" id="pob" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Country}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="country" id="country" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.City}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="city" id="city" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.District}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="district" id="district" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Commune}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="commune" id="commune" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Village}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="village" id="village" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Zip_Code}}</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="zip-code" id="zip_code" placeholder="">
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{translation.Description}}</label>
+        <div class="col-sm-10">
+            <textarea id="description" class="form-control"></textarea>
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">{{ translation.Photo}}</label>
+        <div class="col-sm-10">
+            <input type="file" name="files[]" id="filer_input" multiple="multiple">
+          
+            <span class="messages"></span>
+        </div>
+    </div>
+
+    <div class="append_permission">
+       {{!-- append with employees --}}
+    </div>
+
+    <div class= "part_submit" >
+        <div class="form-group row">
+            <label class="col-sm-2"></label>
+            <div class="col-sm-10 text-right">
+                <button  id="cancel" type="reset" class="btn btn-danger m-b-0">{{translation.Cancel}}</button>
+                <button id="submit" type="submit" class="btn btn-inverse m-b-0">{{ translation.Submit}}</button>
+            </div>
+        </div>
+    </div>
+    
+</form>  
+
+<script type="text/javascript">
+focus();
+
+
+
+
+function focus(){
+   var focusedElement;
+    $(document).on('focus', 'input', function () {
+        if (focusedElement == this) return; //already focused, return so user can now place cursor at specific point in input.
+        focusedElement = this;
+        setTimeout(function () { focusedElement.select(); }, 100); //select all text in any field on focus for easy re-entry. Delay sightly to allow focus to "stick" before selecting.
+    });
+}
+
+    $('input[name="birthdate"]').daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,       
+        "autoUpdateInput": false
+    });
+
+    $('input[name="birthdate"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY'));
+    });
+
+
+    $('input[name="national_number_expire"]').daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,       
+        "autoUpdateInput": false
+    });
+
+    $('input[name="national_number_expire"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY'));
+    });
+
+
+    $('input[name="visa_number_expire"]').daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,       
+        "autoUpdateInput": false
+    });
+
+    $('input[name="visa_number_expire"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY'));
+    });
+
+    $('input[name="passport_number_expire"]').daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,       
+        "autoUpdateInput": false
+    });
+
+    $('input[name="passport_number_expire"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY'));
+    });
+
+
+    
+        
+</script>
+

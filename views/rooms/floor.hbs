@@ -1,0 +1,234 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"></i>  {{translation.Flo_Floors}}</h4>
+                <span class="text-pink m-l-30">{{translation.Flo_Floor_Management}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/rooms">
+                    <h5><i class="feather icon-arrow-left"></i>{{translation.Flo_Back_to_Rooms}}</h5>
+                </a>
+            </div>
+            <div class="table-responsive m-t-5">
+                <table class="table" id="floor" class="floor">
+                    <thead>
+                        <tr>
+                            <th class="col-1" style="display: none;">#</th>
+                            <th class="col-1">{{translation.Flo_Floor_Name}}</th>
+                            <th class="col-1">{{translation.Flo_Floor_Number}}</th>
+                            <th class="col-8">{{translation.Flo_Note}}</th>                
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                        
+                </table>
+            </div>
+            <button type="button" 
+            id="add"
+            class="btn btn-inverse waves-effect waves-light add">{{translation.Flo_Add_Floor}}
+            </button>
+            <input type="hidden" id="refress">
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {  
+    delay(get_floor(),500);
+
+     $('#floor').Tabledit({
+        autoFocus: true,
+        editButton: false,
+        deleteButton: true,
+        hideIdentifier: false,
+        columns: {
+            identifier: [0, 'id'],
+            editable: [[1, 'Name'], [2, 'Number'], [3, 'Note']]
+        }
+    });
+
+
+
+    //Delete floor
+    $(document).on('click', '.tabledit-delete-button', function(){
+        var id = $(this).closest('tr').attr('id');
+           $('.tabledit-confirm-button').click(function(){
+                delete_floor(id);
+            })
+    })
+    
+    //add function
+    $("#add").click(function(){
+      add_floor();
+    })
+
+    $(document).on('blur', '.tabledit-input', function(){
+
+        
+        var name = $(this).attr('name');
+        var id = $(this).closest('tr').attr('id');
+        
+        var value = $(this).val();
+        if(id){
+            update_floor(id,name,value);
+        }
+    })
+
+function add_floor(){
+ try{
+    $.ajax({
+        url:"/api/room/floor/add",
+        method:"post",
+        dataType:'json',
+        data:{
+            'name':'Edit Name',
+            'number':'Edit Number',
+            'note':'Edit note'
+        },
+        success: function(res){
+            new PNotify({
+                title: 'Add Success',
+                icon: 'icofont icofont-info-circle',
+                type: 'success',
+                delay: 500,
+                after_close: function(){
+                     get_floor();
+                }
+            });           
+        },
+        error: function(err){
+            alert(err)
+        }
+    }) //end ajax 
+  }catch (error) {
+    console.error(error);
+  }
+
+}
+
+function update_floor(id,column_name,value){
+   try{ 
+    $.ajax({
+        url:"/api/room/floor/edit",
+        method:"post",
+        dataType:'json',
+        data:{
+            'id':id,
+            'column_name':column_name,
+            'value':value
+        },
+        success: function(res){
+           new PNotify({
+                title: 'Edit Success',
+                icon: 'icofont icofont-info-circle',
+                type: 'success',
+                delay: 500,
+                after_close: function(){
+                   get_floor();
+                }
+            });
+        },
+        error: function(err){
+            alert(err)
+        }
+    }) //end ajax 
+  }catch (error) {
+    console.error(error);
+  }
+}
+
+function delete_floor(id){
+  try{ 
+    $.ajax({
+    url:'/api/room/floor/'+id,
+    type:"GET",
+    contentType:"application/json",
+    dataType:"json",
+    data:{'id':id},
+    success:function(res){
+           new PNotify({
+                title: 'Delete success',
+                icon: 'icofont icofont-info-circle',
+                type: 'success',
+                delay: 500,
+                after_close:function(){
+                    get_floor();
+                }
+            })
+    }   
+    })
+  }catch (error) {
+    console.error(error);
+  }
+}
+
+function get_floor(){
+var data = {};   
+ try{     
+        $.ajax({
+            url: '/api/room/floor/view',     
+            type: 'GET',
+            contentType: 'application/json', 
+            data: JSON.stringify(data),
+            success: function(res) {
+
+
+                    var temp = ""  
+                    
+            $.each(res.rows,function(index,data){
+                    
+                    temp += '<tr id="'+data.id+'"><th scope="row" style="display: none;">'+data.id+'</th>'
+                    
+                    temp += '<td class="tabledit-view-mode"><span class="tabledit-span">'+data.name+'</span> <input class="tabledit-input form-control input-sm" type="text" name="name" value=""></td>'
+
+                    temp +=  ' <td class="tabledit-view-mode"><span class="tabledit-span">'+data.number+'</span><input class="tabledit-input form-control input-sm" type="text" name="number"   value=""></td>'
+
+                    temp += '<td class="tabledit-view-mode"><span class="tabledit-span">'+ data.note +'</span><input class="tabledit-input form-control input-sm" type="text" name="note" value=""></td>'
+
+                    temp +='</tr>'   
+                }) 
+                    
+                $("tbody").html(temp)
+                
+                $('#floor').Tabledit({
+                    autoFocus: true,
+                    editButton: false,
+                    deleteButton: true,
+                    hideIdentifier: false,
+                    columns: {
+                        identifier: [0, 'id'],
+                        editable: [[1, 'Name'], [2, 'Number'], [3, 'Note']]
+                    }
+                });
+
+            } ,
+            error:function(response){
+                new PNotify({
+                    title: 'Server Error',
+                    icon: 'icofont icofont-info-circle',
+                    type: 'error'
+                });
+            }  
+        })//end ajax
+    }catch (error) {
+        console.error(error);
+     }
+}
+	//into ajax request into server
+function delay(callback, ms) {
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+	}
+
+
+
+
+})//end jquery
+</script>

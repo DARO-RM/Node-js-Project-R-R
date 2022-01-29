@@ -1,0 +1,579 @@
+<div class="card">
+	<div class="card-body tab-icon">
+        {{> nav_rental_collection }}
+            
+            <div class="row">
+                <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ translation.Payment_Invoice_Number}}</th>
+                            <th>{{ translation.Payment_Date}}</th>
+                            <th>{{ translation.Payment_Room}}</th>
+                            <th>{{ translation.Payment_Customer}}</th>
+                            <th>{{ translation.Payment_Room_Fee}}</th>
+                            <th>{{ translation.Payment_Services_Fee}}</th>
+                            <th>{{ translation.Payment_Utilities_Fee}}</th>
+                            <th>{{ translation.Payment_Total}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="app_data">      </tbody>
+
+                </table>
+                </div>
+            </div>
+	</div>
+</div>
+
+<!-- Payment Form -->
+<div id="sidebar" class="navsidebar displaysidebar sidebar2">
+    <div class="had-container">
+        <div class="card card_main p-fixed navsidebar-main o-auto">
+            <div class="sidebar-box">
+                <div class="sidebar-inner-header">
+                    <a class="hide_sidebar"><i class="feather icon-chevron-left"></i></a>
+                    Payment
+                </div>
+                <!--                
+                <div class="main-friend-list">
+                    <div class="media userlist-box" data-placement="left">
+                        <a class="media-left" href="#">
+                          <div class="f-13 ">Media left</div>
+                        </a>
+                    </div>
+                </div>
+                -->
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="card-body">
+                            <div class="row p-t-5">
+                                <div class="col-6">{{ translation.Payment_Discount}}</div>
+                              
+                                <div class="col-6 text-right"><a href="#" id="discount" data-placement="top" data-type="text" data-pk="1" data-title="Enter Discount" style="color: red;"></a></div>
+                                
+                            </div>
+                            <div class="row p-t-5">
+                             
+                                <div class="col-6">{{ translation.Payment_Discount_Reason}}</div>
+
+                                <div class="col-6 text-right"><a href="#" id="discount-reason" data-placement="top" data-type="text" data-pk="1" data-title="Discount Reason" style="color: red;"></a></div>
+
+                            </div>
+
+                            <div class="row p-t-5">
+                                <div class="col-6">{{ translation.Payment_Subtotal}}</div>
+                                <div class="col-6 text-right" id="subtotal">$ </div>
+                            </div>
+                            
+                            <div class="row p-t-5">
+                                
+                                <div class="col-6">{{ translation.Payment_Tax}} ( VAT-<a href="#" id="tax" data-placement="top" data-type="text" data-pk="1" data-title="Enter Tax" style="color: red;">0</a> % ):</div>
+
+                                <div class="col-6 text-right"><a href="#" id="value_tax" data-placement="top" data-type="text" data-pk="1" data-title="Tax" >$ 0.00</a></div>
+
+                            </div>
+
+                            <div class="row p-t-5">
+
+                                <div class="col-6">{{translation.Payment_Services}} ( Admin Fee-<a href="#" id="adminfee" data-placement="top" data-type="text" data-pk="1" data-title="Enter Admin Fee" style="color: red;">0</a> % ):</div>
+
+                                <div class="col-6 text-right"><a href="#" id="value_adminfee" data-placement="top" data-type="text" data-pk="1" data-title="Tax">$ 0.00</a></div>
+
+                            </div>
+                            <div class="row p-t-5">
+                                <div class="col-6 f-b">{{ translation.Payment_Totals}}</div>
+                                <div class="col-6 text-right f-b" id="total">$ </div>
+                            </div>
+                            <div class="row" style="margin-top: -5px; margin-bottom: -10px;">
+                               <div class="col-12"><hr></div>
+                            </div>
+                            {{!-- <div class="row p-t-5">
+                                <div class="col-6 f-b"><a href="#"><i class="icofont icofont-close text-danger"></i></a> Cash</div>
+                                <div class="col-6 text-right f-b">$ 6.00</div>
+                            </div>
+                            <div class="row p-t-5">
+                                <div class="col-6 f-b"><a href="#"></a><i class="icofont icofont-close text-danger"></i></a> Bank Transfer</div>
+                                <div class="col-6 text-right f-b">$ 6.00</div>
+                            </div> --}}
+
+                            <div class="row p-t-5">
+                                <div class="col-6 f-b"><a href="#"></a> Payment</div>
+                                <div class="col-6 text-right f-b" id="payments">$ 0.00 </div>
+                            </div>
+
+                            <div class="row" style="margin-top: -5px; margin-bottom: -10px;">
+                               <div class="col-12"><hr></div>
+                            </div>
+                            <div class="row p-t-5">
+                                <div class="col-12 f-b">{{ translation.Payment_Payment_Type}}</div>
+                                <div class="col-12 text-left f-b">
+                                    <button type="button" class="btn btn-sm m-1 payment_type">Cash</button>
+                                    <button type="button" class="btn btn-sm m-1 payment_type">Cheuque</button>
+                                    <button type="button" class="btn btn-sm m-1 payment_type">Bank Transfer</button>
+                                    <button type="button" class="btn btn-sm m-1 payment_type">i-Banking</button>
+                                    <button type="button" class="btn btn-sm m-1 payment_type">Credit Card</button>
+                                </div>
+                            </div>
+                            <div class="row p-t-5">
+                                <div class="col-12 f-b">
+                                    <div class="input-group input-group-button">
+                                        <input type="text" class="form-control" placeholder="Add Payment" id="get_payment">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text btn btn-inverse no-round-btn">
+                                                <span class="completed_payment" style="display: none;">Complete Payments</span>
+                                                <span class="add_payment">Add Payments</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-12">{{translation.Payment_Note }}</div>
+                                <div class="col-12">
+                                    <textarea class="form-control"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                   
+                    <div class="col-xs-12 col-sm-12 col-md-6">
+                       <div class="card-body tab-icon">
+                           <div class="table-responsive">
+                                <table class="table table-xs table-bordered f-14" id="service" >
+                                    <tr>
+                                        <th class="col-6">{{ translation.Payment_Items}}</th>
+                                        <th>{{ translation.Payment_Qty}}</th>
+                                        <th>{{ translation.Payment_Price}}</th>
+                                        <th>{{ translation.Payment_Total}}</th>
+                                    </tr>
+                                </table>
+                            </div>
+                       </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar inner chat start-->
+<div class="panelsidebar_inner">
+    <div class="media sidebar-inner-header">
+        <a class="back_sidebar">
+            <i class="feather icon-chevron-left"></i> Second Sidebar
+        </a>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() { 
+		
+
+delay(list_payment(),500);
+
+function list_payment(){
+    var data = {};        
+		try{
+			$.ajax({
+				url: '/api/rental/payment/view',       
+				type: 'GET',
+				contentType: 'application/json', 
+				data: JSON.stringify(data),
+				success: function(res) {
+					console.log(res)
+					if(res.rows.length>0){
+						var temp = "" ;
+						$.each(res.rows,function(index,data){
+                            
+                            data.room_price = parseFloat(data.room_price).toFixed(2);
+                            data.service_price = parseFloat(data.service_price).toFixed(2);
+                            data.utility_price = parseFloat(data.utility_price).toFixed(2);
+                            var total = parseFloat(data.room_price) +  parseFloat(data.service_price) + parseFloat(data.utility_price);
+
+                                    temp += ' <tr id='+data.id+'>'+
+                                    '    <td>'+data.inv_Num+'</td>'+
+                                    '    <td>'+
+                                    '        <span>'+data.collection_time+'</span>'+
+                                    '    </td>'+
+                                    '    <td>'+
+                                    '        <span>'+data.roomName+'</span>'+
+                                    '    </td>'+
+                                    '    <td>'+
+                                    '        <span>'+data.cusName+'</span>'+
+                                    '    </td>'+
+                                    '    <td>'+
+                                    '        <span>'+data.room_price+' USD</span>'+
+                                    '   </td>'+
+                                    '    <td>'+
+                                    '        <span>'+data.service_price+' USD</span>'+
+                                    '    </td>'+
+                                    '    <td>'+
+                                    '        <span>'+data.utility_price+' USD</span>'+
+                                    '    </td>'+
+                                    '    <td>'+total+' USD</td>'+
+                                    '    <td>'+
+                                    '   <td>';
+
+                                   
+                            if(data.paymented=='1'){
+                              temp+= ' <div class="btn-group dropdown-split-inverse">'+
+                                    '  <button type="button" class="btn btn-inverse btn-sm col-10 already_paid" style="font-size: 14px;" name="'+data.id+'"><i class="icofont icofont-check-circled"></i>{{ translation.Payment_Paid}}</button>'+
+                                    '            <button type="button" class="btn btn-inverse btn-sm col-2 dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+                                    '                <span class="sr-only"></span>'+
+                                    '            </button>'+
+                                    '            <div class="dropdown-menu" style="will-change: transform;">'+
+                                    '                <a class="dropdown-item waves-effect waves-light" href="#">{{ translation.Payment_Invoice}}</a>'+
+                                    '                <a class="dropdown-item waves-effect waves-light" href="#">{{ translation.Payment_Edit}}</a>'+
+                                    '                <a class="dropdown-item waves-effect waves-light" href="#">{{ translation.Payment_Void}}</a>'+
+                                    '            </div>'+
+                                    '        </div>'+
+                                    '<input type="hidden" class="subTotal'+data.id+'" value="'+total+'">'+
+                                    '</td>'+
+                              '<td><i class="icofont icofont-ui-check btn_checkout"></i>'+
+                              '</td></tr>';
+                            }else{
+
+                                temp+= '<div class="btn-group dropdown-split-inverse">'+
+                                    '            <button type="button" class="btn btn-inverse btn-sm col-10 paymentsidebar" style="font-size: 14px;" name="'+data.id+'"><i class="icofont icofont-check-circled"></i>{{ translation.Payment_Paid}}</button>'+
+                                    '            <button type="button" class="btn btn-inverse btn-sm col-2 dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+                                    '                <span class="sr-only"></span>'+
+                                    '            </button>'+
+                                    '            <div class="dropdown-menu" style="will-change: transform;">'+
+                                    '                <a class="dropdown-item waves-effect waves-light" href="#">{{ translation.Payment_Invoice}}</a>'+
+                                    '                <a class="dropdown-item waves-effect waves-light" href="#">{{ translation.Payment_Edit}}</a>'+
+                                    '                <a class="dropdown-item waves-effect waves-light" href="#">{{ translation.Payment_Void}}</a>'+
+                                    '            </div>'+
+                                    '        </div>'+
+                                    '<input type="hidden" class="subTotal'+data.id+'" value="'+total+'">'+
+                                    '</td>'+
+                                    '<td></td></tr>';
+                            }
+                           
+						});
+
+                    $("#app_data").append(temp);
+                       sidebar();
+					}else{
+						$("#app_data").empty().fadeIn();
+					}
+				}
+			}); 
+		}catch (error) {
+		  	console.error(error);
+		}
+  }
+function delay(callback, ms) {
+    var timer = 0;
+    return function() {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+        callback.apply(context, args);
+        }, ms || 0);
+    };
+}
+function sidebar(){
+
+        // open payment form
+        $('.paymentsidebar').on('click', function() {
+            var my_val = $('.pcoded').attr('vertical-placement');
+            if (my_val == 'right') {
+                var options = {
+                    direction: 'left'
+                };
+            } else {
+                var options = {
+                    direction: 'right'
+                };
+            }
+            $('.sidebar2').toggle('slide', options, 500);
+        });
+
+           //open sidebar2
+        $('.userlist-box').on('click', function() {
+            var my_val = $('.pcoded').attr('vertical-placement');
+            if (my_val == 'right') {
+                var options = {
+                    direction: 'left'
+                };
+            } else {
+                var options = {
+                    direction: 'right'
+                };
+            }
+            $('.panelsidebar_inner').toggle('slide', options, 500);
+        });
+
+        //hide sidebar
+        $('.hide_sidebar').on('click', function() {
+            var my_val = $('.pcoded').attr('vertical-placement');
+            if (my_val == 'right') {
+                var options = {
+                    direction: 'left'
+                };
+            } else {
+                var options = {
+                    direction: 'right'
+                };
+            }
+            $('.displaysidebar').toggle('slide', options, 500);
+        });
+        
+        //back to main
+        $('.back_sidebar').on('click', function() {
+            var my_val = $('.pcoded').attr('vertical-placement');
+            if (my_val == 'right') {
+                var options = {
+                    direction: 'left'
+                };
+            } else {
+                var options = {
+                    direction: 'right'
+                };
+            }
+            $('.panelsidebar_inner').toggle('slide', options, 500);
+            $('.sidebar2').css('display', 'block');
+        });
+     
+        
+}
+
+
+
+$(document).on("click",".already_paid",function(){
+        new PNotify({
+            title: 'Already Paid',
+            icon: 'icofont icofont-info-circle',
+            type: 'success',
+            confirm: { confirm: true }, 
+        }); 
+})
+$(document).on("click",".paymentsidebar",function(){
+   var id = $(this).attr('name');
+  var status = $("#status_paid").val();
+  
+        //for calculate  total
+        var sub_total = $(".subTotal"+id).val();
+        var discount = 0;
+        var tax = 0 ;
+        var admin_pay = 0;
+        var total = sub_total;
+        
+        var discount_reason;
+
+        var payment = 0.00;
+
+            list_service_in_payment(id);
+            $("#total").html("$ "+sub_total);
+            $("#subtotal").html("$ "+sub_total); 
+            $("#payments").html("$ "+payment); 
+            
+            $.fn.editable.defaults.mode = 'popup';     
+            $('#discount').editable({
+                success: function(response, newValue) {
+                    if(newValue!=""){
+                        discount = parseFloat(sub_total) * parseFloat(newValue) * 0.01 ;
+                    
+                    
+                        total = parseFloat(sub_total) - parseFloat(discount) + parseFloat(tax) + parseFloat(admin_pay);
+                        total = parseFloat(total).toFixed(2);
+                    }else{
+                    
+                        discount = 0;
+                        total = parseFloat(sub_total) - parseFloat(discount) + parseFloat(tax) + parseFloat(admin_pay);
+                        total = parseFloat(total).toFixed(2);
+                    }
+                    
+                    
+                    $("#total").html("$ "+total);
+                }
+            });
+            $('#discount-reason').editable({
+                success: function(response, newValue) {
+                    discount_reason= newValue;
+                }
+            });
+            $('#tax').editable({
+                    success: function(response, newValue) {
+                
+                        if(newValue!="") {
+                            tax = parseFloat(sub_total) * parseFloat(newValue) * 0.01 ;
+                            
+                            total = parseFloat(sub_total) - parseFloat(discount) + parseFloat(tax) + parseFloat(admin_pay);
+                        total = parseFloat(total).toFixed(2);
+
+                        }else{
+                            tax = 0;
+                            total = parseFloat(sub_total) - parseFloat(discount) + parseFloat(tax) + parseFloat(admin_pay);
+                            total = parseFloat(total).toFixed(2);
+                        }
+                        
+                        $("#value_tax").html("$ "+tax);
+                        $("#total").html("$ "+total);
+
+                }
+            });
+            $('#adminfee').editable({
+                    success: function(response, newValue) {
+                        
+                        if(newValue!="") {
+                                admin_pay = parseFloat(sub_total) * parseFloat(newValue) * 0.01 ;
+                                
+                                total = parseFloat(sub_total) - parseFloat(discount) + parseFloat(tax) + parseFloat(admin_pay);
+                                total = parseFloat(total).toFixed(2);
+
+                            }else{
+                                admin_pay = 0;
+                                
+                                total = parseFloat(sub_total) - parseFloat(discount) + parseFloat(tax) + parseFloat(admin_pay);
+                                total = parseFloat(total).toFixed(2);
+                            }
+                            
+                            $("#value_adminfee").html("$ "+admin_pay);
+                            $("#total").html("$ "+total);
+                    }
+                });
+                
+
+            $(".payment_type").click(function(){
+                $(".payment_type").removeClass("btn-success");
+                $(this).addClass("btn-success")
+            });
+
+            $(".payment_type").click(function(){
+                $(".payment_type").removeClass("btn-success");
+                $(this).addClass("btn-success")
+            });
+
+
+        
+            $("#get_payment").val(total);
+            var payments = 0;
+            var getpay = $("#get_payment").val();
+            complete_payment(getpay,total);
+
+            //completed start 
+            $("#get_payment").keyup(function(){
+                var getpayTest = $("#get_payment").val();
+                var paymentsTest = parseFloat(payments) + parseFloat(getpayTest);
+                complete_payment(paymentsTest,total);
+            })
+            
+            $(".add_payment").click(function(){
+                getpay = $("#get_payment").val();
+                payments = parseFloat(payments) + parseFloat(getpay);
+                $("#payments").html('$ '+payments);
+                $("#get_payment").val('0');
+                complete_payment(payments,total);
+            })
+
+            $(".completed_payment").click(function(){
+                getpay = $("#get_payment").val();
+                payments = parseFloat(payments) + parseFloat(getpay);
+                if( parseFloat(payments) >= parseFloat(total)){
+                
+                try{     
+                        $.ajax({
+                            url:"/api/rental/payment/add/"+id,
+                            method:"POST",
+                            dataType:"json",
+                            data:{"payment_total":payments},
+                            success:function(res){
+                                new PNotify({
+                                    title: 'Payments Success',
+                                    icon: 'icofont icofont-info-circle',
+                                    type: 'success',
+                                    delay: 500,
+                                    after_close:function(){         
+                                        location.reload(); 
+                                    }
+                                });        
+
+                            },
+                            error:function(response){
+                            alert('server error occured')
+                            }
+                        }) //end ajax 
+                }catch (error) {
+                    console.error(error);
+                }
+                }
+            })
+
+   
+
+})
+
+function complete_payment(get_pay,total){
+    if( parseFloat(get_pay) >= parseFloat(total)){
+        $(".completed_payment").css("display","");
+        $(".add_payment").css("display","none");
+    }else{
+        $(".completed_payment").css("display","none");
+        $(".add_payment").css("display","");
+    }
+}
+function list_service_in_payment(id){
+var data= {};
+        try{
+			$.ajax({
+				url: '/api/rental/payment/service/'+ id,       
+				type: 'GET',
+				contentType: 'application/json', 
+				data: JSON.stringify(data),
+				success: function(res) {
+				
+					if(res.rows.length>0){
+						var temp = "" 
+						$.each(res.rows,function(index,data){
+
+                        data.serviceQty = parseInt(data.serviceQty);
+                        data.servicePrice = parseFloat(data.servicePrice).toFixed(2);
+                        data.serviceTotal = parseFloat(data.serviceTotal).toFixed(2);
+
+                         temp +=    " <tr>" +
+                                    "    <td>"+data.serviceName+"</td> "+
+                                    "     <td>"+data.serviceQty+"</td> "+
+                                    "     <td>"+data.servicePrice+" $</td> "+
+                                    "     <td>"+data.serviceTotal+" $</td> "+
+                                    " </tr> ";
+					
+						});
+						$("#service").append(temp).fadeIn();
+					
+					
+
+					}else{
+                        return;
+                    }
+				}
+			}); 
+		}catch (error) {
+		  	console.error(error);
+		}
+
+
+
+
+}
+function delay(callback, ms) 
+	{
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+	}
+
+
+});
+</script>

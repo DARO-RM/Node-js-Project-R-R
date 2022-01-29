@@ -1,0 +1,318 @@
+
+<div class="card">
+    <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"></i> {{translation.Room_New_Room}}</h4>
+                <span class="text-pink m-l-30">{{translation.Room_Required}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/rooms">
+                    <h5><i class="feather icon-arrow-left"></i>{{translation.Room_Back_to_Rooms}}</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+<form method="post" action="" name="registration" id="registration" >
+    <div class="card-block">
+        <div class="form-group row">
+            <label class="col-sm-2">{{translation.Room_Floor}}</label>
+            <div class="col-sm-10">
+                <select name="room_floor" id="room_floor" class="form-control">
+                    <option value="0">Choose Floors</option>
+                    {{!-- data.floor --}}
+                </select>
+                <span class="messages"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">{{translation.Room_Room_Name}}</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="name" id="name" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">{{translation.Room_Room_Number}}</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="number" id="number" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">{{translation.Room_Price}}</label>
+            <div class="col-sm-10">
+                <select name="price" id="price" class="form-control">
+                    <option value="0">Choose Prices</option>
+                     {{!-- data.price --}}
+                </select>
+                <span class="messages"></span>
+            </div>
+        </div>
+        
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">{{translation.Room_Facility}}</label>
+            <div class="col-sm-10" id="facility">
+                    {{!-- data.facility --}}
+                <span class="messages"></span>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">{{translation.Room_Description}}</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id='description'></textarea>
+                <span class="messages"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label ">{{translation.Photo}}</label>
+            <div class="col-sm-10 text-center ">
+                    <input type="file" name="files[]" id="filer_input" multiple="">
+                <span class="messages"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2"></label>
+            <div class="col-sm-10 text-right">
+            <button id='cancel' class="btn btn-danger m-b-0">{{ translation.Cancel}}</button>
+            <button type="submit" id="submit" class="btn btn-primary m-b-0">{{ translation.Submit}}</button>
+        </div>
+	</div>
+    </form>
+</div>
+
+<script>
+
+$(document).ready(function(){
+
+        floor_append();
+        price_append();
+        facility_append();
+
+    var form = $("#registration");
+    form.on("submit", function (e) {
+      
+       if(!form.valid()) {  return false; }
+            
+        e.preventDefault();
+
+          var data_ajax={};
+          data_ajax.name = $("#name").val();
+          data_ajax.number = $("#number").val();
+          data_ajax.description = $("#description").val();
+          data_ajax.floor_id = $('#room_floor').find(":selected").val();
+          data_ajax.rental_price_id = $('#price').find(":selected").val();
+
+
+
+        var get_facility = "";
+
+        $('#facility :checked').each(function(i){
+          get_facility = $(this).val() + ","
+        })
+
+    
+    
+ 
+        data_ajax.facility_id = get_facility;
+ 
+        var image = $("#filer_input").val();
+
+        data_ajax.file_data = "";
+        data_ajax.file_name = "";
+
+       if(image != ""){
+            const image_file = document.querySelector('#filer_input').files[0];
+            data_ajax.file_name = image_file.name;
+            toBase64(image_file)
+            .then(
+            (res)=>{
+                data_ajax.file_data = res; 
+                $.ajax({
+                    url:"/api/room/add",
+                    method:"post",
+                    dataType:'json',
+                    data:data_ajax,
+                    success: function(res){
+                      
+                              /*
+                            silient redirect urlW
+                            */
+                            new PNotify({
+                                title: 'Add Success',
+                                icon: 'icofont icofont-info-circle',
+                                type: 'success',
+                                delay: 500,
+                                after_close: function(){
+                                    history.pushState('/rooms/add', '','/rooms/');
+                                    location.reload(); 
+                                }
+                            });           
+                                   
+                    },
+                    error:function(response){
+                        alert("Cannot Add");
+                    }
+                }) //end  ajax  
+            }).catch((err)=>{alert(err)});
+       }else{
+                 $.ajax({
+                    url:"/api/room/add",
+                    method:"post",
+                    dataType:'json',
+                    data:data_ajax,
+                    success: function(res){
+                      
+                              /*
+                            silient redirect urlW
+                            */
+                            new PNotify({
+                                title: 'Add Success',
+                                icon: 'icofont icofont-info-circle',
+                                type: 'success',
+                                delay: 500,
+                                after_close: function(){
+                                    history.pushState('/rooms/add', '','/rooms/');
+                                    location.reload(); 
+                                }
+                            });           
+                                   
+                    },
+                    error:function(response){
+                        new PNotify({
+                            title: 'Server Error',
+                            icon: 'icofont icofont-info-circle',
+                            type: 'error'
+                        });
+                    }
+            }) //end  ajax 
+       }    
+    })//end submit
+
+     $("#cancel").click(function(){
+       // window.location.href = "/customers/dependent";
+       history.pushState('/rooms/add', '','/rooms/');
+       location.reload(); 
+    })//end cancel
+
+
+    function floor_append(){
+        var data = {};
+        try{
+         $.ajax({
+            url:"/api/room/floor/view",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                //console.log(res.rows);
+                var temp = "";
+
+                    $.each(res.rows,function(index,data){
+                        temp += '<option value="'+data.id+'">'+data.name+'</option>'      
+                    })
+                    $("#room_floor").append(temp);
+
+            },
+            error:function(res){
+              alert('server error');
+            }
+         })//end ajax
+        }catch(error) {
+		   	console.error(error);
+     	}
+    } //function
+
+    function facility_append(){
+        var data = {};
+       try{ 
+         $.ajax({
+            url:"/api/room/facility/view",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                //console.log(res.rows);
+                var temp = "";
+               
+                    $.each(res.rows,function(index,data){
+
+                            temp += '<div class="checkbox-fade fade-in-primary">'
+                            temp +=   ' <label>'
+                            temp +=  '<input type="checkbox" id="facility" name="Language" value="'+data.id+'">'
+                            temp +=         '<span class="cr">'
+                            temp +=       '      <i class="cr-icon icofont icofont-ui-check txt-primary"></i>'
+                            temp +=      ' </span>'
+                            temp +=     '  <span>'+data.name+'</span>'
+                            temp +=  ' </label>'
+                            temp += '</div><br>'
+
+                    })
+                    $("#facility").append(temp);
+               
+                    //alert('task sucessfull');
+            },
+            error:function(res){
+                alert('server error occured');
+            }
+         });//end ajax
+
+        }catch(error) {
+		   	console.error(error);
+     	}
+    } //function
+
+    function price_append(){
+        var data = {};
+        try{
+         $.ajax({
+            url:"/api/room/append/price",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                //console.log(res.rows);
+                var temp = "";
+               
+                    $.each(res.rows,function(index,data){
+                        data.price =  parseFloat(data.price).toFixed(2);
+                        temp += '<option value="'+data.id+'">'+data.price+' USD /'+data.unit+'</option>'      
+                    })
+                    $("#price").append(temp);
+              
+                    //alert('task sucessfull');
+                },
+            error:function(res){
+              alert('server error occured');
+            }
+         });//end ajax
+        }catch(error) {
+		   	console.error(error);
+     	}
+    } //function
+ 
+    const toBase64 = file => new Promise ((resolve, reject) => {
+	    const reader = new FileReader();
+	    reader.readAsDataURL(file);
+	    reader.onload = () => resolve(reader.result);
+	    reader.onerror = error => reject(error);
+	});
+
+   
+    
+
+}) //end jquery
+</script>
+
+
+
+

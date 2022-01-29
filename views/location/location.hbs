@@ -1,0 +1,221 @@
+<div class="card">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group row">
+					<div class="col-4">
+						<input type="text" class="form-control form-control-lg search"  id="search" name="search" placeholder="search">
+					</div>
+					<button class="btn btn-inverse" id="btnSearch" name="btnSearch"  ><i class="feather icon-search"></i></button>
+				</div>
+			</div>
+			<div class="col-md-6 text-right">
+				<a href="/location/add">
+					<button class="btn btn-inverse"><i class="feather icon-plus"></i>New location</button>
+				</a>
+			</div>
+			<div class="table-responsive m-t-5">
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="col-1 text-center">
+								<input type="checkbox" value="" style="height: 18px; width: 18px;">	
+							</th>
+							<th class="col-1 text-left">Action</th>
+							<th class="col-1">Company Name</th>
+							<th class="col-1">Phone</th>
+							<th class="col-4"> Address</th>
+							<th class="col-1">logo</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+ </div>
+ <script type="text/javascript">
+$(document).ready(function(){
+
+delay(get_location(),500);
+
+	$('.search').keyup(delay(function(){
+		var search = $(".search").val();
+		console.log('Time elapsed!', this.value);
+		if(search.length>0){
+			search_location(search);
+		}else{
+			get_location();
+		}
+	},500));
+
+	  //click delete btn
+	$(document).on('click', '.delete_btn', function(){
+
+		var id = $(this).attr('name');
+
+		new PNotify({
+				title: 'You want to delete data?',
+				icon: 'icofont icofont-info-circle',
+				type: 'error',
+				hide:'false',
+				confirm: { confirm: true },
+				before_open: function(PNotify) {
+					PNotify.get().css(get_center_pos(PNotify.get().width()));
+				},
+				after_close:function(){
+					get_location();
+				}
+		}).get().on('pnotify.confirm', function() {
+
+			$.ajax({
+				url:'/api/location/delete/'+id,
+				type:"GET",
+				contentType:"application/json",
+				dataType:"json",
+				success:function(res){
+					new PNotify({
+						title: 'Delete success',
+						icon: 'icofont icofont-info-circle',
+						type: 'success',
+						delay: 500,
+						after_close:function(){
+							get_location();
+						}
+					});
+				}
+		});
+		}).on('pnotify.cancel', function() {
+			new PNotify({
+				title: 'Delete Cancel',
+				icon: 'icofont icofont-info-circle',
+				type: 'error',
+				delay: 500,
+				after_close:function(){
+					get_location();
+				}
+			})
+		});
+	});
+	 //function read all data from database
+    
+	
+	function get_location(){
+        var data = {};        
+    $.ajax({
+		  url: '/api/location/view',         
+          type: 'GET',
+          contentType: 'application/json', 
+          data: JSON.stringify(data),
+          success: function(res) {
+            
+
+                  var temp = "" 
+              $.each(res.rows,function(index,data){
+								temp += '<tr><td class="text-center">'
+								temp +=		'<input type="checkbox" value="" style="height: 18px; width: 18px;"></td>'
+								temp += '<td>'
+								temp +=	'<div class="dropdown-split-inverse">'
+							
+								temp +=	'<a href="/location/edit?id='+data.id+'" type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>Edit</a>'
+								temp +=	'<button type="button" class="btn btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+								temp +=	'<span class="sr-only"></span>'
+								temp +=	'</button>'
+								temp +=	'<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">'
+								temp +=	'	<a class="dropdown-item waves-effect waves-light delete_btn"   href="#" name="'+data.id+'">Delete</a>'
+								temp +=	'</div></div></td>'
+                temp +="<td>"+ data.location_name + "</td>"
+								temp +="<td>"+ data.phone +"</td> "
+								temp +="<td>"+ data.address +"</td>"
+     						
+							
+
+									if(data.company_logo == ""){
+												temp += '<td><img src="/assets/images/user.png" class="img-50" alt="user.png"></td>'
+									}else{
+										console.log(data.company_logo)
+										temp += '<td><img src="'+data.company_logo+'" class="img-50" ></td>'
+									}
+									temp += "<tr>"
+                })
+                $("tbody").html(temp);
+            //end success
+           
+          }
+        }); //end ajax
+      }//end function
+	//Search location
+	function search_location(search){     
+    $.ajax({
+		      url: '/api/location/search',         
+          type: 'POST',
+          data:{'search':search},
+          success: function(res) {
+	
+            if(res.msg=='success'){
+                  var temp = "" 
+              $.each(res.rows,function(index,data){
+				 				temp += '<tr><td class="text-center">'
+								temp +=		'<input type="checkbox" value="" style="height: 18px; width: 18px;"></td>'
+								temp += '<td>'
+								temp +=	'<div class="dropdown-split-inverse">'
+							
+								temp +=	'<a href="/location/edit?id='+data.id+'" type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>Edit</a>'
+								temp +=	'<button type="button" class="btn btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+								temp +=	'<span class="sr-only"></span>'
+								temp +=	'</button>'
+								temp +=	'<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">'
+								temp +=	'	<a class="dropdown-item waves-effect waves-light"  id="delete_btn" href="#" name="'+data.id+'">Delete</a>'
+								temp +=	'</div></div></td>'
+                temp +="<td>"+ data.location_name + "</td>"
+								temp +="<td>"+ data.phone +"</td> "
+								temp +="<td>"+ data.address +"</td>"
+          
+									if(data.company_logo ==""){
+												temp += '<td><img src="/assets/images/user.png" class="img-50" alt="user.png"></td>'
+									}else{
+										temp += '<td><img src="'+data.company_logo+'" class="img-50" alt="user.png"></td>'
+									}
+									 console.log(data.company_logo);
+									temp += "<tr>";
+                })
+                $("tbody").html(temp);
+            //end success
+            }
+            else{
+              alert(" false ")
+            }
+          }
+        }); //end ajax
+      }//end function
+
+function delay(callback, ms) 
+	{
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+	}
+	//align confirm message at top-center
+function get_center_pos(width, top)
+	{
+		// top is empty when creating a new notification and is set when recentering
+		if (!top) {
+			top = 30;
+			// this part is needed to avoid notification stacking on top of each other
+			$('.ui-pnotify').each(function() {
+			top += $(this).outerHeight() + 20;
+			});
+		}
+		return {
+		"top": top,
+		"left": ($(window).width() / 2) - (width / 2)
+		}
+	}
+
+})
+</script>

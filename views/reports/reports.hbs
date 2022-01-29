@@ -1,0 +1,191 @@
+<!-- Row start -->
+<div class="row">
+     <!-- Multiple Open Accordion start -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-header-text">{{translation.Rep_All_Reports}}</h5>
+            </div>
+            <div class="card-block accordion-block">
+                <div id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="accordion-panel customers">
+                        <div class=" accordion-heading" role="tab"
+                            id="headingOne">
+                            <h3 class="card-title accordion-title">
+                                <a class="accordion-msg" data-toggle="collapse"
+                                    data-parent="#accordion"
+                                    href="#collapseOne" aria-expanded="false"
+                                    aria-controls="collapseOne">
+                                  <span class="pcoded-micon"><i class="feather icon-users"></i></span>&nbsp;
+                                  <span class="pcoded-mtext">{{translation.Rep_Customers}}</span>
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="accordion-panel rentals">
+                        <div class=" accordion-heading" role="tab"
+                            id="headingTwo">
+                            <h3 class="card-title accordion-title">
+                                <a class="accordion-msg" data-toggle="collapse"
+                                    data-parent="#accordion"
+                                    href="#collapseTwo" aria-expanded="false"
+                                    aria-controls="collapseTwo">
+                                   <span class="pcoded-micon"><i class="feather icon-list"></i></span>&nbsp;
+                                   <span class="pcoded-mtext">{{translation.Rep_Rental}}</span>
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="accordion-panel collections">
+                        <div class=" accordion-heading" role="tab"
+                            id="headingThree">
+                            <h3 class="card-title accordion-title">
+                                <a class="accordion-msg" data-toggle="collapse"
+                                    data-parent="#accordion"
+                                    href="#collapseThree" aria-expanded="false"
+                                    aria-controls="collapseThree">
+                                 <span class="pcoded-micon"><i class="feather icon-calendar"></i></span>&nbsp;
+                                 <span class="pcoded-mtext">{{translation.Rep_Collections}}</span>
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="accordion-panel expenses">
+                        <div class=" accordion-heading" role="tab"
+                        id="headingFour">
+                            <h3 class="card-title accordion-title">
+                                <a class="accordion-msg" data-toggle="collapse"
+                                    data-parent="#accordion"
+                                    href="#collapseFour" aria-expanded="false"
+                                    aria-controls="collapseFour">
+                                    <span class="pcoded-micon"><i class="feather icon-file-text"></i></span>&nbsp;
+                                    <span class="pcoded-mtext">{{translation.Rep_Expenses}}</span>
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="accordion-panel payments">
+                        <div class="accordion-heading" role="tab"
+                            id="headingFive">
+                            <h3 class="card-title accordion-title">
+                                <a class="accordion-msg" data-toggle="collapse"
+                                    data-parent="#accordion" href="#collapseFive"
+                                    aria-expanded="false"
+                                    aria-controls="collapseFive">
+                                    <span class="pcoded-micon"><i class="icon ti-money"></i></span>&nbsp;
+                                    <span class="pcoded-mtext">{{translation.Rep_Payment}}</span>
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- Multiple Open Accordion ends -->
+    <!-- Single Open Accordion start -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-header-text listrpt "> <i class="icofont icofont-thin-double-left"></i>&nbsp; {{translation.Rep_Make_selection}}</h5>
+            </div>
+            <div class="card-block accordion-block">
+                <div id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="accordion-panel" id="customers">
+                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="accordion-content accordion-desc">
+                                <a href="/reports/customers_checked_in" class="list-group-item">
+					                <i class="icofont icofont-file-text"></i>&nbsp; Customers Checked In
+				                </a>
+                                <a href="/reports/customers_checked_out" class="list-group-item">
+					                <i class="icofont icofont-file-text"></i>&nbsp; Customers Checked Out
+				                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-panel" id="rentals">
+                        <div id="collapseTwo" class="panel-collapse collapse"
+                            role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="accordion-content accordion-desc">
+                                <a href="/reports/rental" class="list-group-item">
+					                <i class="icofont icofont-file-text"></i>&nbsp; Summary Reports
+				                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {{!-- collaction --}}
+                    <div class="accordion-panel" id="collections">
+                        <div id="collapseThree" class="panel-collapse collapse"
+                            role="tabpanel" aria-labelledby="headingThree">
+                            <div class="accordion-content accordion-desc">
+                                <a href="/reports/etimate/coll-payment" class="list-group-item">
+					                <i class="icon ti-calendar">&nbsp;&nbsp;</i>Estimate Collections Payment
+				                </a>
+                                <a href="/reports/rental/coll-payment" class="list-group-item">
+					                <i class="icon ti-calendar">&nbsp;&nbsp;</i>Rental Collections Payment
+				                </a>
+                                <a href="/reports/rental/unpaid-payment" class="list-group-item">
+					                <i class="icon ti-calendar">&nbsp;&nbsp;</i>Unpaid Paymentt
+				                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-panel" id="expenses">
+                        <div id="collapseFour" class="panel-collapse collapse"
+                            role="tabpanel" aria-labelledby="headingFour">
+                            <div class="accordion-content accordion-desc">
+                                <a href="/reports/detail-expenses" class="list-group-item">
+					               <i class="icofont icofont-file-text">&nbsp;&nbsp;</i>Details Reports
+				                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-panel" id="payments">
+                        <div id="collapseFive" class="panel-collapse collapse"
+                            role="tabpanel" aria-labelledby="headingFive">
+                            <div class="accordion-content accordion-desc">
+                                <a href="/reports/payment" class="list-group-item">
+					              <i class="icofont icofont-file-text">&nbsp;&nbsp;</i>Details Reports
+				                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Single Open Accordion ends -->
+</div>
+<!-- Row end -->
+<script>
+    $(document).ready(function(){ 
+    $("#customers, #rentals, #expenses, #payments,#collections").hide();
+        $(".customers").click(function(){
+        $("#customers").show();
+        $('.listrpt').html('<i class="feather icon-users"/>&nbsp;&nbsp;<h5 > {{translation.Rep_Customers}}</5>');
+        $(" #rentals, #expenses, #payments,#collections").hide();
+        });
+
+        $(".rentals").click(function(){
+        $("#rentals").show();
+        $('.listrpt').html('<i class="feather icon-list"/>&nbsp;&nbsp;<h5> {{translation.Rep_Rental}} </5>');
+        $("#customers, #expenses, #payments,#collections").hide();
+        });
+
+        $(".collections").click(function(){
+        $("#collections").show();
+        $('.listrpt').html('<i class="feather icon-calendar"/>&nbsp;&nbsp;<h5> {{translation.Rep_Collections}}  </5>');
+        $("#customers, #expenses, #payments,#rentals").hide();
+        });
+        $(".expenses").click(function(){
+        $("#expenses").show();
+        $('.listrpt').html('<i class="feather icon-file-text"/>&nbsp;&nbsp;<h5> {{translation.Rep_Expenses}} </5>');
+        $("#customers, #collections, #payments,#rentals").hide();
+        });
+
+        $(".payments").click(function(){
+        $("#payments").show();
+        $('.listrpt').html('<i class="icon ti-money"/>&nbsp;&nbsp;<h5> {{translation.Rep_Payment}} </5>');
+        $("#customers, #expenses, #collections,#rentals").hide();
+        });
+});
+</script>

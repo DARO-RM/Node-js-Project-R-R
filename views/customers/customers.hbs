@@ -1,0 +1,231 @@
+<div class="card">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group row">
+					<div class="col-4">
+						<input id="search" type="text" class="form-control form-control-lg search" placeholder="{{translation.Search}}">
+					</div>
+					<button class="btn btn-inverse"><i class="feather icon-search"></i></button>
+				</div>
+			</div>
+			<div class="col-md-6 text-right">
+				<a href="/customers/add">
+					<button class="btn btn-inverse"><i class="feather icon-plus"></i>{{translation.Cus_New_Customer}}</button>
+				</a>
+				<div class="dropdown-inverse dropdown open">
+					<button class="btn btn-inverse dropdown-toggle waves-effect waves-light " type="button" id="dropdown-customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="feather icon-settings"></i></button>
+					<div class="dropdown-menu" aria-labelledby="dropdown-customer" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+						<a class="dropdown-item waves-light waves-effect" href="/customers/property">{{translation.Cus_Manage_Property}}</a>
+						<a class="dropdown-item waves-light waves-effect" href="/customers/dependent">{{translation.Cus_Manage_Dependents}}</a>
+					</div>
+				</div>
+			</div>
+			<div class="table-responsive m-t-5">
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="col-1 text-center">
+								<input type="checkbox" value="" style="height: 18px; width: 18px;">	
+							</th>
+							<th class="col-1 text-left">{{translation.Cus_Action}}</th>
+							<th class="col-2">{{translation.Cus_Full_Name}}</th>
+							<th class="col-2">{{translation.Cus_Phone}}</th>
+							<th class="col-2">{{translation.Cus_Work}}</th>
+							<th class="col-4">{{translation.Cus_Company_Address}}</th>
+							<th class="col-1">{{ translation.Photo}}</th>
+						</tr>
+					</thead>
+					<tbody></tbody>	
+				</table>
+			</div>
+		</div>
+ </div>
+ 
+<script type="text/javascript">
+$(document).ready(function () {
+
+	//load customers
+	delay(get_customers(),500);
+
+	//search customer
+	$('.search').keyup(delay(function(){
+		var search = $(".search").val();
+		console.log('Time elapsed!', this.value);
+		if(search.length>0){
+			search_customer(search);
+		}else{
+			get_customers();
+		}
+	},500));
+
+	//delete customer
+	$(document).on('click', '.delete_btn', function(){
+		var id = $(this).attr('name');
+		new PNotify({
+				title: 'You want to delete data?',
+				icon: 'icofont icofont-info-circle',
+				type: 'error',
+				hide:'false',
+				confirm: { confirm: true },
+				before_open: function(PNotify) {
+					PNotify.get().css(get_center_pos(PNotify.get().width()));
+				},
+				after_close:function(){
+					get_customers();
+				}
+		}).get().on('pnotify.confirm', function() {
+
+			$.ajax({
+				url:'/api/customers/delete/'+id,
+				type:"GET",
+				contentType:"application/json",
+				dataType:"json",
+				success:function(res){
+					new PNotify({
+						title: 'Delete success',
+						icon: 'icofont icofont-info-circle',
+						type: 'success',
+						delay: 500,
+						after_close:function(){
+							get_customers();
+						}
+					});
+				}
+		});
+		}).on('pnotify.cancel', function() {
+			new PNotify({
+				title: 'Delete Cancel',
+				icon: 'icofont icofont-info-circle',
+				type: 'error',
+				delay: 500,
+				after_close:function(){
+					get_customers();
+				}
+			})
+		});
+	});
+
+	//get customers
+    function get_customers()
+    {
+    	var data = {};        
+		try{
+			$.ajax({
+				url: '/api/customers/view',       
+				type: 'GET',
+				contentType: 'application/json', 
+				data: JSON.stringify(data),
+				success: function(res) {
+					if(res.rows.length>0){
+						var temp = "" 
+						$.each(res.rows,function(index,data){
+							temp += '<tr><td class="text-center">';
+							temp +=	'<input type="checkbox" value="" style="height: 18px; width: 18px;"></td>';
+							temp += '<td>';
+							temp +=	'<div class="dropdown-split-inverse">';
+							temp +=	'<a href="/customers/edit?id='+data.customer_id+'" type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>{{ translation.Edit}}</a>';
+							temp +=	'<button type="button" class="btn btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+							temp +=	'<span class="sr-only"></span>';
+							temp +=	'</button>';
+							temp +=	'<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">';
+							temp +=	'<a class="dropdown-item waves-effect waves-light delete_btn" href="#" name="'+data.customer_id+'">{{translation.Delete}}</a>';
+							temp +=	'</div></div></td>';
+							temp += '<td>'+ data.full_name +'</td>';
+							temp += '<td><a href="tel:015338826">'+ data.phone_1 +'</a></td>';
+							temp += '<td>'+ data.work +'</td>';
+							temp += '<td>'+ data.company_address+'</td>';
+							if(data.image ==""){
+									temp += '<td><img src="/assets/images/user.png" class="img-50" alt="user.png"></td>';
+							}else{
+									temp += '<td><img src="'+data.image+'" class="img-50" alt="user.png"></td>';
+							}
+						});
+						$("tbody").html(temp).fadeIn();
+					}else{
+						$("tbody").empty().fadeIn();
+					}
+				}
+			}); 
+		}catch (error) {
+		  	console.error(error);
+		}
+    }
+
+	//protect to each keyword searching submitting
+	//into ajax request into server
+	function delay(callback, ms) 
+	{
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+	}
+
+	//search customers
+	function search_customer(search){
+		try {
+			$.ajax({
+				url: '/api/customers/search',         
+				type: 'POST',
+				data:{'search':search},
+				success: function(res) {
+					if(res.rows.length>0){
+						var temp = "" 
+						$.each(res.rows,function(index,data){	
+							temp += '<tr><td class="text-center">';
+							temp +=	'<input type="checkbox" value="" style="height: 18px; width: 18px;"></td>';
+							temp += '<td>';
+							temp +=	'<div class="dropdown-split-inverse">';
+							temp +=	'<a href="/customers/edit?id='+data.customer_id+'" type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>{{ translation.Edit }}</a>';
+							temp +=	'<button type="button" class="btn btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+							temp +=	'<span class="sr-only"></span>';
+							temp +=	'</button>';
+							temp +=	'<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">';
+							temp +=	'	<a class="dropdown-item waves-effect waves-light delete_btn" href="#" name="'+data.customer_id+'">{{ translation.Delete }}</a>';
+							temp +=	'</div></div></td>';
+							temp += '<td>'+ data.full_name +'</td>';
+							temp += '<td><a href="tel:015338826">'+ data.phone_1 +'</a></td>';
+							temp += '<td>'+ data.work +'</td>';
+							temp += '<td>'+ data.address_1 +'</td>';
+							if(data.image ==""){
+									temp += '<td><img src="/assets/images/user.png" class="img-50" alt="user.png"></td>';
+							}else{
+									temp += '<td><img src="'+data.image+'" class="img-50" alt="user.png"></td>';
+							}
+						});
+						
+						$("tbody").html(temp).fadeIn();
+					}else{
+						$("tbody").empty().fadeIn();
+					}
+				}
+			});
+		}catch (error) {
+			console.error(error);
+		}
+    }
+	//align confirm message at top-center
+	function get_center_pos(width, top)
+	{
+		// top is empty when creating a new notification and is set when recentering
+		if (!top) {
+			top = 30;
+			// this part is needed to avoid notification stacking on top of each other
+			$('.ui-pnotify').each(function() {
+			top += $(this).outerHeight() + 20;
+			});
+		}
+		return {
+		"top": top,
+		"left": ($(window).width() / 2) - (width / 2)
+		}
+	}
+
+});
+
+</script>

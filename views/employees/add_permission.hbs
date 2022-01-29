@@ -1,0 +1,244 @@
+<div class="card">
+    <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"></i> New Property</h4>
+                <span class="text-pink m-l-30">Field red are required</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/employees/permission/">
+                    <h5><i class="feather icon-arrow-left"></i> Back to Permission</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+
+<form action="" name="registration" id="registration">
+    <div class="card-block">
+   
+         {{!-- part --}}
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label text-danger">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="name" id="name" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+
+         {{!-- part Display_name--}}
+          {{!-- <div class="form-group row">
+              <label class="col-sm-2 col-form-label ">Display Name</label>
+              <div class="col-sm-10">
+                  <input type="text" class="form-control" name="display_name" id="display_name" placeholder="">
+                  <span class="messages"></span>
+              </div>
+          </div> --}}
+
+         {{!-- part --}}
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="description" name="description" placeholder=""></textarea>
+                <span class="messages"></span>
+            </div>
+        </div>
+
+ {{!-- part append--}}
+         <div class="form-group row">
+            <label class="col-sm-2 col-form-label" id="permission"><b>permission</b></label>
+            <div class="col-sm-10">
+              
+               <ol class="dd-list">
+                    {{!-- employee --}}
+                    <li class="dd-item" >
+                        <div class="dd-handle nestable-info">Employee</div>
+                            <ol class="dd-list" id="employee">
+                            
+                            </ol>
+                    </li>
+                    {{!-- customer --}}
+                    <li class="dd-item">
+                        <div class="dd-handle nestable-info">Customer</div>
+                            <ol class="dd-list" id="customer">
+                            
+                            </ol>
+                    </li>
+                    {{!-- room --}}
+                    <li class="dd-item">
+                        <div class="dd-handle nestable-info">Room</div>
+                            <ol class="dd-list" id="room">
+                            
+                            </ol>
+                    </li>
+                    {{!-- Expense --}}
+                    <li class="dd-item">
+                        <div class="dd-handle nestable-info">Expense</div>
+                            <ol class="dd-list" id="expense">
+                            
+                            </ol>
+                    </li>
+                    {{!-- Report--}}
+                    <li class="dd-item">
+                        <div class="dd-handle nestable-info">Report</div>
+                            <ol class="dd-list" id="report">
+                            
+                            </ol>
+                    </li>
+                    {{!-- Rental --}}
+                    <li class="dd-item">
+                        <div class="dd-handle nestable-info">Rental</div>
+                            <ol class="dd-list" id="rental">
+                            
+                            </ol>
+                    </li>
+                    {{!-- Collections --}}
+                    <li class="dd-item">
+                        <div class="dd-handle nestable-info">Collections</div>
+                            <ol class="dd-list" id="collection">
+                            
+                            </ol>
+                    </li>
+
+                </ol>
+      
+            </div>
+        </div>
+
+
+       {{!-- button --}}
+        <div class="form-group row">
+            <label class="col-sm-2"></label>
+            <div class="col-sm-10 text-right">
+                <button id="cancel" class="btn btn-danger m-b-0">Cancel</button>
+                <button type="submit" id="submit" class="btn btn-inverse m-b-0">Submit</button>
+            </div>
+        </div>
+    </div>
+  </form>
+</div>
+
+ <script type="text/javascript">
+    
+  $(document).ready(function(){
+
+   append_action();
+
+    $(document).on("click","#submit",function(){
+      
+      event.preventDefault();
+      var data_ajax={};
+      
+      data_ajax.name = $("#name").val();
+      data_ajax.description= $("#description").val();
+
+      var action_id='' ;
+
+      $('#employee :checked').each(function(i){
+          action_id  += $(this).val() + ","
+      })
+
+      $('#customer :checked').each(function(i){
+          action_id  += $(this).val() + ","
+      })
+
+      $('#room :checked').each(function(i){
+          action_id  += $(this).val() + ","
+      })
+
+      $('#expense :checked').each(function(i){
+          action_id  += $(this).val() + ","
+      })
+      $('#report :checked').each(function(i){
+          action_id  += $(this).val() + ","
+      })
+      $('#rental :checked').each(function(i){
+          action_id  += $(this).val() + ","
+      })
+       $('#collection :checked').each(function(i){
+          action_id  += $(this).val() + ","
+      })
+
+     data_ajax.action_id = action_id;
+
+         $.ajax({
+              url:"/api/permission/add",
+              method:"post",
+              dataType:'json',
+              data:data_ajax,
+              success: function(res){
+                     
+                    new PNotify({
+                        title: 'Add success',
+                        icon: 'icofont icofont-info-circle',
+                        type: 'success',
+                        delay: 500,
+                        after_close: function(){
+                            history.pushState('/employees/permission/add', '','/employees/permission/');
+                            location.reload(); 
+                        }
+                    });
+            
+              },
+                error:function(response){
+                    new PNotify({
+                        title: 'Server Error',
+                        icon: 'icofont icofont-info-circle',
+                        type: 'error'
+                    });
+                }
+          }) //end  ajax  
+    })//end submit
+ 
+$("#cancel").click(function(){
+    history.pushState('/employees/permission/add', '','/employees/permission/');
+    location.reload(); 
+})//end cancel
+
+function append_action(){
+    var data = {};
+        $.ajax({
+        url:"/api/permission/view_action",
+        type: 'GET',
+        dataType:'json',
+        data: JSON.stringify(data),
+        success: function(res) {
+
+            if(res.msg == "success"){
+            
+                $.each(res.rows,function(index,data){
+                        
+                var temp = '<li class="dd-item">'     
+                    temp += '<div class="dd-handle">'     
+                    temp += ' <div class="checkbox-fade fade-in-primary">'     
+                    temp += '<label>'     
+                    temp += '<input type="checkbox" class="permission" value="'+data.id+'">'     
+                    temp += '<span class="cr">'     
+                    temp += ' <i class="cr-icon icofont icofont-ui-check txt-primary"></i>'     
+                    temp += ' </span>'     
+                    temp += '<span>'+data.display_name+'</span>'     
+                    temp += '</label>'     
+                    temp += '</div></div></li>'   
+
+
+                    $("#"+data.resource).append(temp);
+                    
+                })
+
+            
+
+            }else{
+                alert("Errors..!");
+            }
+            
+                //alert('task sucessfull');
+        },
+        error:function(res){
+            alert('server error');
+        }
+    });//end ajax
+} //function
+
+})//end jquery
+
+</script>

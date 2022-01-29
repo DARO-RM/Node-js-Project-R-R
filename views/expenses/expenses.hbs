@@ -1,0 +1,153 @@
+<div class="card">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group row">
+					<div class="col-4">
+						<input type="text" class="form-control form-control-lg" id="search" name="search" placeholder="{{ translation.Search}}">
+					</div>
+					<button class="btn btn-inverse" id="btnSearch" name="btnSearch"><i class="feather icon-search"></i></button>
+				</div>
+			</div>
+			<div class="col-md-6 text-right">
+				<a href="/expenses/add">
+					<button class="btn btn-inverse"><i class="feather icon-plus"></i>{{translation.Exp_New_Expense}}</button>
+				</a>
+				<div class="dropdown-inverse dropdown open">
+					<button class="btn btn-inverse dropdown-toggle waves-effect waves-light " type="button" id="dropdown-customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="feather icon-settings"></i></button>
+					<div class="dropdown-menu" aria-labelledby="dropdown-customer" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+						<a class="dropdown-item waves-light waves-effect" href="/expenses/categories">{{translation.Exp_Manage_Expense_Categories}}</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="table-responsive m-t-5">
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="col-1 text-center">
+							<input type="checkbox" value="" style="height: 18px; width: 18px;">	
+							</th>
+							<th class="col-1 text-left">{{translation.Exp_Action}}</th>
+							<th class="col-1">{{ translation.Exp_Payment}}</th>
+							<th class="col-2">{{ translation.Exp_Memo}}</th>
+							<th class="col-1">{{ translation.Exp_Amount}}</th>
+							<th class="col-1">{{ translation.Exp_Validator}}</th>
+						</tr>
+					</thead>
+
+                     <tbody>
+						<tr>
+							<td class="text-center">
+								<input type="checkbox" value="" style="height: 18px; width: 18px;">	
+							</td>
+							<td>
+								<div class="dropdown-split-inverse">
+									<a href="/expenses/edit">
+											<button type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>{{ translation.Edit}}</button>
+									</a>
+									<button type="button" class="btn btn-sm btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<span class="sr-only"></span>
+									</button>
+									<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
+										<a class="dropdown-item waves-effect waves-light" href="#">{{ translation.Delete}}</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    $(document).on('click','#deletebtn',function(){
+		var id = $(this).attr('name')
+        $.ajax({
+          url:'/api/expenses/deleted/'+id,
+          type:"GET",
+          contentType:"application/json",
+          dataType:"json",
+          data:{'id':id},
+          success:function(res){
+                list_data();
+              }
+        });
+    })//end_document
+
+	list_data()
+	$('#search').keyup(function(){
+        var search = $("#search").val();
+		if(search == '')
+		{
+			list_data();
+		}else
+		{
+			data_search(search);
+		}
+	});
+	
+function list_data(){
+	var data = {};        
+	$.ajax({
+	url: '/api/expenses/views',         
+	type: 'GET',
+	contentType: 'application/json', 
+	data: JSON.stringify(data),
+	success: function(res) {
+			var temp = "" 
+			$.each(res.rows,function(index,data){
+				temp +="<tr>"
+				temp +="<td class='text-center'>"
+				temp +="<input type='checkbox' value='' style='height: 18px; width: 18px;'>"
+				temp +="</td>"
+				temp +="<td>"
+				temp +="<div class='dropdown-split-inverse'>"
+				temp +="<a href='/expenses/edit?id="+ data.id +"'<button type='button' class='btn  btn-edit btn-inverse'><i class='icofont icofont-pencil-alt-2'></i>{{ translation.Edit}}</button></a>"
+				temp +="<button type='button' class='btn  btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='sr-only'></span></button>"
+				temp +="<div class='dropdown-menu' x-placement='bottom-start' style='position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;'>"
+				temp +="<a type='button' id='deletebtn' name='"+data.id+"' class=' dropdown-item waves-effect waves-light' href=''>{{ translation.Delete}}</a>"
+				temp +="</div>"
+				temp +="</td>"
+				temp +="<td>" + "- {{translation.Exp_Date}} :"+ data.ex_date+"<br>"+ "- {{translation.Exp_Payment_Type}} :"+ data.paymenttype_name +"<br>"+ "- {{translation.Exp_Payment_Form}} :"+ data.paymentform_name +"<br>"+ "- {{translation.Exp_From_Budget}} :"+ data.budget_name +"</td>"
+				temp +="<td>" + "- {{translation.Exp_Category}} :"+ data.categories_name +"<br>"+ "- {{translation.Exp_Expense_Note}} :"+ data.expense_note+"</td>"
+				temp +="<td>" + "<span class='text-dark'><label class='badge badge-danger f-14'>"+ data.amount +" USD"+"</label></span>"+"</td>"
+				temp +="<td>" + "- {{translation.Exp_Request_By}} :"+ data.request_by +"<br>"+"- {{translation.Exp_Approve_By}} :"+ data.approved_by +"</td><tr>"
+			})
+			$("tbody").html(temp);
+	}//end_sucess
+	}); //end ajax
+}//end function
+
+function data_search (search){       
+	$.ajax({
+	url: '/api/expenses/search',         
+	type: 'POST',
+	data:{'search':search},
+	success: function(res){
+			var temp = "" 
+			$.each(res.rows,function(index,data){
+				temp +="<tr>"
+				temp +=" <td class='text-center'>"
+				temp +=" <input type='checkbox' value='' style='height: 18px; width: 18px;'>"
+				temp +="</td>"
+				temp +=" <td>"
+				temp +="<div class='dropdown-split-inverse'>"
+				temp +="<a href='/expenses/edit?id="+ data.id +"'<button type='button' class='btn btn-sm btn-edit btn-inverse'><i class='icofont icofont-pencil-alt-2'></i>Edit</button></a>"
+				temp +="<button type='button' class='btn btn-sm btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='sr-only'></span></button>"
+				temp +="<div class='dropdown-menu' x-placement='bottom-start' style='position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;'>"
+				temp +="<a type='button' id='deletebtn' name='"+data.id+"' class=' dropdown-item waves-effect waves-light ' href='#'>Delete</a>"
+				temp +="</div>"
+				temp +="</td>"
+				temp +="<td>" + "- Date: "+data.ex_date+"<br>"+ "- Payment Type: "+ data.paymentype_name +"<br>"+ "- Payment Form: "+ data.paymentform_name +"<br>"+ "- From Budget: "+ data.budget_name +"</td>"
+				temp +="<td>" + "- Category: "+ data.categories_name +"<br>"+ "- Expense Note: "+ data.expense_note+"</td>"
+				temp +="<td>" + "<span class='text-dark'><label class='badge badge-danger f-14'>"+ data.amount +" USD"+"</label></span>"+"</td>"
+				temp +="<td>" + "- Request By: "+ data.request_by +"<br>"+"- Approve By: "+ data.approved_by +"</td><tr>"
+				})
+				$("tbody").html(temp);
+		}
+	}); //end_ajax
+}//end function
+</script>

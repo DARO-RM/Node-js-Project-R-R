@@ -1,0 +1,445 @@
+<div class="card">
+	<div class="card-body tab-icon">
+        {{> nav_rental_collection }}
+            
+        <div class="row">
+            <div class="table-responsive">
+            <table class="table table-expandable">
+                <thead>
+                    <tr>
+                        <th>{{ translation.Rented_Photo}}</th>
+                        <th>{{ translation.Rented_Room}}</th>
+                        <th>{{ translation.Rented_Customer}}</th>
+                        <th>{{ translation.Rented_Utilities}}</th>
+                        <th>{{ translation.Rented_Room_Fee}}</th>
+                        <th>{{ translation.Rented_Service_Fee}}</th>
+                        <th>{{ translation.Rented_Total}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+          </div>
+        </div>
+	</div>
+</div>
+
+
+<!-- Payment Form -->
+<div id="sidebar" class="navsidebar displaysidebar sidebar2 ">
+    <div class="had-container">
+        <div class="card card_main p-fixed navsidebar-main o-auto">
+            <div class="sidebar-box">
+                <div class="sidebar-inner-header">
+                    <a class="hide_sidebar"><i class="feather icon-chevron-left"></i></a>
+                    CHECK OUT
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-10">
+                        <div class="card-body">
+                            
+                            <div class="row p-t-10">
+                                <div class="col-6 f-b">
+                                    <div class="input-group input-group-button">
+                                         <div class="input-group-prepend">
+                                            <span class="input-group-text btn btn-inverse no-round-btn">
+                                                <span class="add_payment">Check Out Date</span>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" id="check_out" name="check_out" placeholder="">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-6 f-b">
+                                    <div class="input-group input-group-button">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text btn btn-inverse no-round-btn">
+                                                <span class="add_payment">Deposite</span>
+                                            </span>
+                                        </div>
+                                        <input type="fix" class="form-control" id="deposite" name="deposite" placeholder="" readonly>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text btn btn-inverse no-round-btn">
+                                                <span class="add_payment">$</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                            <div class="row p-t-10">
+                                <div class="col-6 f-b">
+                                    <div class="input-group input-group-button">
+                                         <div class="input-group-prepend">
+                                            <span class="input-group-text btn btn-inverse no-round-btn">
+                                                <span class="add_payment">Water Number</span>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="" id="water_number">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-6 f-b">
+                                    <div class="input-group input-group-button">
+                                         <div class="input-group-prepend">
+                                            <span class="input-group-text btn btn-inverse no-round-btn">
+                                                <span class="add_payment">Electric Number</span>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="" id="electric_number">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row p-t-10">
+                                <div class="col-12 f-b text-right">
+                                    <button id="submit" type="submit" class="btn btn-inverse m-b-0">{{translation.Submit}}</button>
+                                </div>
+                            </div>     
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+$(document).ready(function(){
+
+delay(get_rented(),500);
+
+    $('input[name="check_out"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            locale: {
+                format:'DD-MM-YYYY'
+            }
+    },
+    function(start, end, label) {
+            var years = moment().diff(start, 'years');
+    });
+
+
+  
+function get_rented(){
+    var data = {};        
+		try{
+			$.ajax({
+				url: '/api/rental/rented/view',       
+				type: 'GET',
+				contentType: 'application/json', 
+				data: JSON.stringify(data),
+				success: function(res) {
+					console.log(res)
+					if(res.rows.length>0){
+						var temp = "" ;
+			$.each(res.rows,function(index,data){
+   
+
+            data.water_fee = parseFloat(data.water_fee).toFixed(2);
+            data.electric_fee = parseFloat(data.electric_fee).toFixed(2);
+            data.roomFee = parseFloat(data.roomFee).toFixed(2);
+            data.service_total = parseFloat(data.service_total).toFixed(2);
+            data.total = parseFloat(data.total).toFixed(2);
+            data.water_pre = parseFloat(data.water_pre).toFixed(2);
+            data.electric_pre = parseFloat(data.electric_pre).toFixed(2);
+         
+
+        temp +=  ' <tr> '+
+        '                 <td><img src="/assets/images/product-list/pro-l1.png" class="img-fluid"></td>'+
+        '                 <td>'+data.roomName+'</td>'+
+        '                <td>'+data.fullname+'</td>'+
+        '                <td>'+
+        '                 <span><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Water_Fee}} '+data.water_fee+' USD/M3</span>'+
+        '                 <br/>'+
+        '                 <span><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Electric_Fee}} '+data.electric_fee+' USD/KW</span>'+
+        '                 </td>'+
+        '                 <td>'+data.roomFee+'USD</td>'+
+        '                 <td>'+data.service_total+' USD</td>'+
+        '                <td>'+data.total+' USD</td>'+
+        '             </tr>'+
+
+        '             <tr>'+
+        '                 <td colspan="8" style="border-top: none !important;">'+
+        '                     <div class="text-right" style="margin-top: -3em;">'+
+        '                <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i name="'+data.rental_id+'" class="icofont icofont-ui-close btn_checkout"></i></a>'+
+        '                     <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i name="'+data.rental_id+'" class="icofont icofont-ui-edit btn_edit"></i></a>'+
+        '                     </div>'+
+        '                    <table class="table">'+
+        '                         <tr>'+
+        '                             <td>'+
+        '                                 <div class="row m-r-5">'+
+        '                                     <div class="table-responsive">'+
+        '                                         <table class="table table-xs table-bordered f-14">'+
+        '                                             <tr>'+
+        '                                                <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Rent_Date}}</td>'+
+        '                                                 <td>'+data.rentDate+'</td>'+
+        '                                             </tr>'+
+        '                                             <tr>'+
+        '                                                 <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Checked_In}}</td>'+
+        '                                                 <td>'+data.checked_in+'</td>'+
+        '                                             </tr>'+
+        '                                             <tr>'+
+        '                                                 <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Floor_Num}}</td>'+
+        '                                                 <td>'+data.floorNumber+'</td>'+
+        '                                             </tr>'+
+        '                                         </table>'+
+        '                                     </div>'+
+        '                                 </div>'+
+        '                             </td>'+
+        '                             <td>'+
+       '                                  <div class="row m-r-5">'+
+       '                                      <div class="table-responsive">'+
+       '                                          <table class="table table-xs table-bordered f-14">'+
+         '                                            <tr>'+
+         '                                                <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Old_Water}}</td>'+
+        '                                                 <td>'+data.water_pre+'</td>'+
+       '                                              </tr>'+
+        '                                             <tr>'+
+        '                                                 <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Old_Electric}}</td>'+
+        '                                                 <td>'+data.electric_pre+'</td>'+
+        '                                            </tr>'+
+        '                                         </table>'+
+        '                                    </div>'+
+        '                                 </div>'+
+        '                             </td>'+
+        '                            <td>'+
+        '                                 <div class="row m-r-5">'+
+        '                                     <div class="table-responsive">'+
+        '                                         <table class="table table-xs table-bordered f-14">'+
+        '                                             <tr>'+
+        '                                                 <th>{{ translation.Rented_Name}}</th>'+
+        '                                                 <th>{{ translation.Rented_Price}}</th>'+
+        '                                                 <th>{{ translation.Rented_Qty}}</th>'+
+        '                                                 <th>{{ translation.Rental_Totals}}</th>'+
+        '                                             </tr>'
+
+        var ser_name =  data.service_name.split(',');
+        var ser_price = data.service_price.split(',');
+        var ser_qty =   data.service_qty.split(',');
+        var ser_total = data.service_total_per_unit.split(',');
+
+       if(ser_name[0] != ""){
+            for(var i in ser_name){
+
+                ser_price[i] = parseFloat(ser_price[i]).toFixed(2);
+                ser_qty[i]= parseFloat(ser_qty[i]).toFixed(2);
+                ser_total[i] = parseFloat(ser_total[i]).toFixed(2);
+
+               temp +=  ' <tr>'+
+                        ' <td><i class="icofont icofont-check-circled"></i>'+ser_name[i]+'</td>'+
+                        '   <td>'+ser_price[i]+' USD</td>'+
+                        '   <td>'+ser_qty[i]+'</td>'+
+                        '   <td>'+ser_total[i]+' USD</td>'+
+                        ' </tr>';
+            }
+       }else{
+             temp +=    ' <tr>'+
+                        ' <td><i class="icofont icofont-check-circled"></i> </td>'+
+                        '   <td>0 USD</td>'+
+                        '   <td> 0 </td>'+
+                        '   <td> 0 USD</td>'+
+                        ' </tr>';
+       }
+     
+
+      temp +=   '                             </table> '+
+                '                         </div> '+
+                '                     </div> '+
+                '                 </td> '+
+                '             </tr> '+
+                '         </table> '+
+                '      </td> '+
+                ' </tr> ';
+                            
+
+					});
+						$("tbody").html(temp).fadeIn();
+						toggle();
+
+                        sidebar();
+					}else{
+						$("#tbody").empty().fadeIn();
+					}
+				}
+			}); 
+		}catch (error) {
+		  	console.error(error);
+		}
+  }
+
+
+function toggle(){
+    $('.table-expandable').each(function () {
+        var table = $(this);
+        table.children('thead').children('tr').append('<th></th>');
+        table.children('tbody').children('tr').filter(':odd').hide();
+        table.children('tbody').children('tr').filter(':even').click(function () {
+            var element = $(this);
+            element.next('tr').toggle('slow');
+            element.find(".table-expandable-arrow").toggleClass("up");
+        });
+        table.children('tbody').children('tr').filter(':even').each(function () {
+            var element = $(this);
+            element.append('<td><div class="table-expandable-arrow"></div></td>');
+        });
+    });
+}
+
+$(document).on('click','.btn_edit',function(){
+    var id = $(this).attr('name');
+    var url = '/rental/rented/edit?id='+id;
+  window.location.replace(url);
+})
+
+function sidebar(){
+        // open payment form
+        $('.btn_checkout').on('click', function() {
+            var my_val = $('.pcoded').attr('vertical-placement');
+            if (my_val == 'right') {
+                var options = {
+                    direction: 'left'
+                };
+            } else {
+                var options = {
+                    direction: 'right'
+                };
+            }
+            $('.sidebar2').toggle('slide', options, 500);
+        });
+
+           //open sidebar2
+        $('.userlist-box').on('click', function() {
+            var my_val = $('.pcoded').attr('vertical-placement');
+            if (my_val == 'right') {
+                var options = {
+                    direction: 'left'
+                };
+            } else {
+                var options = {
+                    direction: 'right'
+                };
+            }
+            $('.panelsidebar_inner').toggle('slide', options, 500);
+        });
+
+        //hide sidebar
+        $('.hide_sidebar').on('click', function() {
+            var my_val = $('.pcoded').attr('vertical-placement');
+            if (my_val == 'right') {
+                var options = {
+                    direction: 'left'
+                };
+            } else {
+                var options = {
+                    direction: 'right'
+                };
+            }
+            $('.displaysidebar').toggle('slide', options, 500);
+        });
+        
+        //back to main
+        $('.back_sidebar').on('click', function() {
+            var my_val = $('.pcoded').attr('vertical-placement');
+            if (my_val == 'right') {
+                var options = {
+                    direction: 'left'
+                };
+            } else {
+                var options = {
+                    direction: 'right'
+                };
+            }
+            $('.panelsidebar_inner').toggle('slide', options, 500);
+            $('.sidebar2').css('display', 'block');
+        });
+     
+        
+}
+
+
+
+
+$(document).on('click','.btn_checkout',function(){
+    var id = $(this).attr('name');
+    get_rented_deposite(id);
+    
+    $("#submit").click(function(){
+        
+        var check_out = $("#check_out").val();
+       
+        check_out_api(id,check_out);
+    })
+
+})
+
+
+function check_out_api(id,check_out_date){
+  
+    $.ajax({
+        url:"/api/rental/rented/checkout/"+id,
+        method:"POST",
+        dataType:"json",
+        data:{"check_out":check_out_date},
+        success:function(res){
+            new PNotify({
+                    title: 'Check Out Success',
+                    icon: 'icofont icofont-info-circle',
+                    type: 'success',
+                    delay: 500,
+                    after_close:function(){         
+                        location.reload(); 
+                    }
+            });        
+        },
+        error:function(response){
+            alert('server error occured')
+        }
+    }) //end ajax 
+    
+}
+
+
+
+function get_rented_deposite(id){
+   var data = {};
+        $.ajax({
+        url:"/api/rental/rented/deposite/"+id,
+        type: 'GET',
+        dataType:'json',
+        data: JSON.stringify(data),
+        success: function(res) {
+                const data = res.rows[0];
+                data.deposite_price = parseFloat(data.deposite_price).toFixed(2);
+                $("#deposite").val(data.deposite_price);
+        },
+        error:function(res){
+            alert('server error occured');
+        }
+    })//end ajax
+}
+
+function delay(callback, ms){
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+}
+      
+})
+</script>

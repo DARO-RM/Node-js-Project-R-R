@@ -1,0 +1,350 @@
+
+<div class="card">
+    <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"></i> Edit Location</h4>
+                <span class="text-pink m-l-30">Field red are required</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/location">
+                    <h5><i class="feather icon-arrow-left"></i> Back to location</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+
+    <div class="card-block">
+        <form action="" name="registration" id="registration">
+        <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="location_name"
+                        id="location_name" placeholder="">
+                    <span class="messages"></span>
+                </div>
+        </div>
+        <input type="hidden" id="id" value="">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Company logo</label>
+            <div class="col-sm-10">
+                <input type="file" name="files[]" id="filer_input" multiple="multiple">
+                <span class="messages"></span>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Company Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Phone</label> 
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="phone" name="phone" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+         <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Fax</label> 
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="fax" name="fax" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="email" name="email" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Address</label>
+            <div class="col-sm-10">
+                <input type="address" class="form-control" id="address" name="address" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Policy</label>
+            <div class="col-sm-10">
+                <input type="address" class="form-control" id="policy" name="policy" placeholder="">
+                <span class="messages"></span>
+            </div>
+        </div>
+       
+        <div class="form-group row">
+            <label class="col-sm-2"></label>
+            <div class="col-sm-10 text-right">
+                <button type="submit" class="btn btn-danger m-b-0">Cancel</button>
+                <button id="submit" type="submit" class="btn btn-inverse m-b-0">Submit</button>
+            </div>
+        </div>
+         </form>
+    </div>
+</div>
+
+   <script type="text/javascript">
+    
+$(document).ready(function(){  
+        //read old data past to input box 
+    getdata(); 
+
+  var delete_file_data = 0;
+  var delete_id =0;
+
+  $(document).on('click','#detele_old',function(){
+      alert("delete");
+      $('.jFiler-items').hide();
+      $('.jFiler-input-caption').html('Input file here');
+      delete_id = $(this).attr('name');
+      delete_file_data = 1;
+  });
+
+    $(document).on('click','#submit',function(){
+    
+            var id = getUrlParameter('id');
+            var data_ajax = {};
+            data_ajax.location_name = $("#location_name").val();
+            data_ajax.company_name = $("#company_name").val();
+            data_ajax.phone =$("#phone").val();
+            data_ajax.fax = $("#fax").val();
+            data_ajax.email = $("#email").val();
+            data_ajax.website =$("#website").val();
+            data_ajax.address =$("#address").val();
+            data_ajax.policy =$("#policy").val();
+            event.preventDefault();
+            var image = $("#filer_input").val();
+            data_ajax.company_logo  = "";
+
+                if(image != ""){
+                    const image_file = document.querySelector('#filer_input').files[0];
+                    toBase64(image_file)
+                    .then(
+                    async (res)=>{
+                        data_ajax.company_logo = await resizeImage(res); 
+                        
+                        $.ajax({
+                            url:"/api/location/edit/"+id,
+                            method:"POST",
+                            dataType:"json",
+                            data:data_ajax,
+                            success: function(res){
+                           
+                                new PNotify({
+                                    title: 'Edit success',
+                                    icon: 'icofont icofont-info-circle',
+                                    type: 'success',
+                                    delay: 500,
+                                    after_close: function(){
+                                        history.pushState('/location/edit', '','/location/');
+                                        location.reload(); 
+                                    }
+                                });  
+                                
+                            },
+                                error:function(response){
+                                    alert('server error occured')
+                                }
+                        }) //end ajax
+                    }).catch((err)=>{alert(err)});
+            }else{
+
+                if(delete_file_data ==1){
+                   delete_file(delete_id);
+                }
+
+                   $.ajax({
+                        url:"/api/location/edit/"+id,
+                        method:"POST",
+                        dataType:"json",
+                        data:data_ajax,
+                        success: function(res){
+                     
+                              new PNotify({
+                                title: 'Edit success',
+                                icon: 'icofont icofont-info-circle',
+                                type: 'success',
+                                delay: 500,
+                                after_close: function(){
+                                    history.pushState('/location/edit', '','/location/');
+                                    location.reload(); 
+                                }
+                              })
+                       
+                        },
+                        error:function(response){
+                            alert('server error occured')
+                        }
+                    }) //end ajax
+            }
+
+
+     })//end submit
+
+
+
+  function getdata(){
+          var id = getUrlParameter('id');
+          var data = {};   
+          $.ajax({
+            url: '/api/location/edit/'+id, 
+            type: 'GET',
+            contentType: 'application/json', 
+            data: JSON.stringify(data),
+            success: function(res) {
+             
+            
+              const data = res.rows[0];
+
+              $("#company_name").val(data.company_name)
+              $("#location_name").val( data.location_name)
+              $("#phone").val(data.phone)
+              $("#fax").val(data.fax)
+              $("#email").val(data.email)
+              $("#website").val(data.website)
+              $("#address").val(data.address)
+              $("#policy").val(data.policy)
+
+            if(data.company_name!=""){
+              var file_name = data.company_name+".jpg";
+            }else if(data.location_name!=""){
+              var file_name = data.location_name+".jpg";
+            }else{
+              var file_name = "1.jpg";
+            }
+    
+                 if(data.company_logo != ""){
+                      var file = dataURLtoFile(data.company_logo,file_name)
+                      var photo_name = ""+file.name;
+                      var photo_size = ""+file.size;
+                      var photo_type = ""+file.type;
+
+                      append_photo(photo_name,photo_size,photo_type,id);
+                  }
+
+
+            }
+          });//end ajax
+        }//end function 
+
+  function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+    sURLVariables = sPageURL.split('&'), sParameterName, i;
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] === sParam) {
+            return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+      }
+      return false;
+  }
+
+  const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+  });
+
+  function append_photo(name,size,type,image_id){
+            
+          var description = '<span>1 files were chosen</span>'
+          var temp = '<div class="jFiler-items jFiler-row">'
+              temp += '<ul class="jFiler-items-list jFiler-items-default">'
+              temp +=' <li class="jFiler-item" data-jfiler-index="0" style="">'
+              temp += '<div class="jFiler-item-container">'
+              temp +=  '<div class="jFiler-item-inner">'
+              temp +=           '<div class="jFiler-item-icon pull-left">'
+              temp +=                '<i class="icon-jfi-file-o jfi-file-type-image jfi-file-ext-jpg"></i>'
+              temp +=   ' </div>'
+              temp +=    '<div class="jFiler-item-info pull-left">'
+              temp +=          '  <div class="jFiler-item-title" title="'+name+'">'+name+'</div>'
+              temp +=           ' <div class="jFiler-item-others"> '
+              temp +=                '<span>size: '+size+'</span>'
+              temp +=               ' <span>type: '+type+'</span>'
+              temp +=               ' <span class="jFiler-item-status"></span>'
+              temp +=           ' </div>'
+              temp +=   ' <div class="jFiler-item-assets">'
+              temp +=           ' <ul class="list-inline">'
+              temp +=               ' <li>'
+              temp +=                  ' <a class="icon-jfi-trash jFiler-item-trash-action" id="detele_old" name="'+image_id+'"></a>'
+              temp +=                '</li>'
+              temp +=            '</ul>'
+              temp +=   ' </div>'
+              temp +=     ' </div>'
+              temp +=    '</div>'
+              temp += '</div>'
+              temp += '</li></div></ul>'
+    
+          $('.jFiler-input').after(temp);
+          $('.jFiler-input-caption').html(description);
+  }
+
+  function dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), 
+      n = bstr.length, 
+      u8arr = new Uint8Array(n);
+
+      while(n--){
+      u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime});
+  }
+
+  const resizeImage = (base64Str) => {
+    return new Promise((resolve) => {
+      let img = new Image()
+      img.src = base64Str
+      img.onload = () => {
+        let canvas = document.createElement('canvas')
+        const MAX_WIDTH = 300;
+        const MAX_HEIGHT = 300;
+        let width = img.width
+        let height = img.height
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width
+            width = MAX_WIDTH
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height
+            height = MAX_HEIGHT
+          }
+        }
+        canvas.width = width
+        canvas.height = height
+        let ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL())
+      }
+    });
+  }
+
+  function delete_file(id){
+    $.ajax({
+      url:'/api/location/delete_file/'+id,
+      type:"GET",
+      contentType:"application/json",
+      dataType:"json",
+      data:{'id':id},
+      success:function(res){}
+    });
+  }
+
+  
+
+
+}) // end 
+  </script>

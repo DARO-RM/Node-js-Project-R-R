@@ -1,0 +1,264 @@
+<div class="card">
+	<div class="card-header">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group row">
+					<div class="col-4">
+						<input type="text" class="form-control form-control-lg search" placeholder="{{ translation.Search}}">
+					</div>
+					<button class="btn btn-inverse"><i class="feather icon-search"></i></button>
+				</div>
+			</div>
+			<div class="col-md-6 text-right">
+                <a href="/customers">
+                    <h5><i class="feather icon-arrow-left"></i> {{translation.Dep_Back_to_Dependent}}</h5>
+                </a>
+				<a href="/customers/dependent/add">
+					<button class="btn btn-inverse"><i class="feather icon-plus"></i>{{translation.Dep_New_Dependent}}</button>
+				</a>
+			</div>
+
+			<div class="table-responsive m-t-5">
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="col-1 text-center">
+								<input type="checkbox" value="" style="height: 18px; width: 18px;">	
+							</th>
+							<th class="col-1 text-left">{{translation.Dep_Action}}</th>
+							<th class="col-2">{{translation.Dep_Parent_Tenant}}</th>
+							<th class="col-2">{{translation.Dep_Full_Name}}</th>
+							<th class="col-2">{{translation.Dep_Phone}}</th>
+							<th class="col-2">{{translation.Dep_Work}}</th>
+							<th class="col-1">{{translation.Dep_Photo}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="text-center">
+								<input type="checkbox" value="" style="height: 18px; width: 18px;">	
+							</td>
+							<td>
+								<div class="dropdown-split-inverse">
+									<button type="button" class="btn btn-inverse btn-edit"><i class="icofont icofont-pencil-alt-2"></i>{{translation.Dep_Edit}}</button>
+									<button type="button" class="btn btn-inverse btn-edit-dropdown dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<span class="sr-only"></span>
+									</button>
+									<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
+										<a class="dropdown-item waves-effect waves-light" href="#">{{translation.Dep_Delete}}</a>
+									</div>
+								</div>
+							</td>
+							<td>Sok Dara</td>
+							<td>Sou Sovanna</td>
+							<td><a href="tel:012345698">012 34 56 98</a></td>
+							<td>Student</td>
+							<td >
+								<img src="/assets/images/user.png" class="img-50" alt="user.png">			
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){  
+	 
+	  delay(get_dependents(),500);
+
+
+			$('.search').keyup(delay(function(){
+				var search = $(".search").val();
+				console.log('Time elapsed!', this.value);
+				if(search.length>0){
+					search_dependets(search);
+				}else{
+					get_dependents();
+				}
+			},500));
+					
+
+
+
+
+
+		$(document).on('click','.delete_btn',function(){
+            var id = $(this).attr('name');
+				
+			         new PNotify({
+											title: 'You want to delete data?',
+											icon: 'icofont icofont-info-circle',
+											type: 'error',
+											hide:'false',
+											confirm: {
+													confirm: true
+											},
+											before_open: function(PNotify) {
+											  PNotify.get().css(get_center_pos(PNotify.get().width()));
+											},
+											after_close:function(){
+													get_dependents();
+											}
+									}).get().on('pnotify.confirm', function() {		 
+											 $.ajax({
+													url:'/api/dependent/delete/'+id,
+													type:"GET",
+													contentType:"application/json",
+													dataType:"json",
+													data:{'id':id},
+													success:function(res){
+																
+																 new PNotify({
+																			title: 'Delete success',
+																			icon: 'icofont icofont-info-circle',
+																			type: 'success',
+																			delay: 500,
+																			after_close:function(){
+																					get_dependents();
+																			}
+																	});																																
+													},
+													error:function(response){
+															new PNotify({
+																	title: 'Server Error',
+																	icon: 'icofont icofont-info-circle',
+																	type: 'error'
+															});
+													}
+												})
+
+									}).on('pnotify.cancel', function() {
+
+												new PNotify({
+														title: 'Delete Cancel',
+														icon: 'icofont icofont-info-circle',
+														type: 'error',
+														delay: 500,
+														after_close:function(){
+																get_dependents();
+														}
+												})
+									})					
+      })
+	//function read all data from database
+function get_dependents(){
+      var data = {}; 
+			try{	       
+        $.ajax({
+		    url: '/api/dependent/view',         
+          type: 'GET',
+          contentType: 'application/json', 
+          data: JSON.stringify(data),
+          success: function(res) {
+            
+                 $('.row_data').remove()
+                  var temp = "" 
+                $.each(res.rows,function(index,data){
+								
+						temp += '<tr><td class="text-center">'
+						temp +=		'<input type="checkbox" value="" style="height: 18px; width: 18px;"></td>'
+						temp += '<td>'
+						temp +=	'<div class="dropdown-split-inverse">'
+						temp +=	'<a href="/customers/dependent/edit?id='+data.dependent_id+'" type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>Edit</a>'
+						temp +=	'<button type="button" class="btn btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+						temp +=	'<span class="sr-only"></span>'
+						temp +=	'</button>'
+						temp +=	'<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">'
+						temp +=	'	<a class="dropdown-item waves-effect waves-light delete_btn"   href="#" name="'+data.dependent_id+'">Delete</a>'
+						temp +=	'</div></div></td>'
+
+						temp += '<td>'+ data.customer_name +'</td>'
+						temp += '<td>'+ data.full_name  +'</td>'
+						temp += '<td><a href="tel:012345698">'+ data.phone_1 +'</a></td>'
+						temp +=  '<td>'+ data.work +'</td>'
+						if(data.image ==""){
+							temp += '<td><img src="/assets/images/user.png" class="img-50" alt="user.png"></td>'
+						}else{
+							temp += '<td><img src="'+data.image+'" class="img-50" alt="user.png"></td>'
+						}				 
+           		 })
+                $("tbody").html(temp);
+        }
+        }); //end ajax
+			}catch (error) {
+			console.error(error);
+		}
+    }//end function
+
+	//protect to each keyword searching submitting
+	//into ajax request into server
+	function delay(callback, ms) {
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+	}
+
+    //Search Customer
+function search_dependets(search){  
+	try {
+		$.ajax({
+			url: '/api/dependent/search',         
+			type: 'POST',
+			data:{'search':search},
+			          success: function(res) {
+            
+                 $('.row_data').remove()
+                  var temp = "" 
+                $.each(res.rows,function(index,data){
+								
+						temp += '<tr><td class="text-center">'
+						temp +=		'<input type="checkbox" value="" style="height: 18px; width: 18px;"></td>'
+						temp += '<td>'
+						temp +=	'<div class="dropdown-split-inverse">'
+						temp +=	'<a href="/customers/dependent/edit?id='+data.dependent_id+'" type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>Edit</a>'
+						temp +=	'<button type="button" class="btn btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+						temp +=	'<span class="sr-only"></span>'
+						temp +=	'</button>'
+						temp +=	'<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">'
+						temp +=	'	<a class="dropdown-item waves-effect waves-light delete_btn"   href="#" name="'+data.dependent_id+'">Delete</a>'
+						temp +=	'</div></div></td>'
+
+						temp += '<td>'+ data.customer_name +'</td>'
+						temp += '<td>'+ data.full_name  +'</td>'
+						temp += '<td><a href="tel:012345698">'+ data.phone_1 +'</a></td>'
+						temp +=  '<td>'+ data.work +'</td>'
+						if(data.image ==""){
+							temp += '<td><img src="/assets/images/user.png" class="img-50" alt="user.png"></td>'
+						}else{
+							temp += '<td><img src="'+data.image+'" class="img-50" alt="user.png"></td>'
+						}				 
+           		 })
+                $("tbody").html(temp);
+        }
+        }); //end ajax
+			}catch (error) {
+			console.error(error);
+		}
+}//end function
+
+
+function get_center_pos(width, top) {
+  // top is empty when creating a new notification and is set when recentering
+  if (!top) {
+    top = 30;
+    // this part is needed to avoid notification stacking on top of each other
+    $('.ui-pnotify').each(function() {
+      top += $(this).outerHeight() + 20;
+    });
+  }
+  return {
+    "top": top,
+    "left": ($(window).width() / 2) - (width / 2)
+  }
+}
+
+})
+</script>

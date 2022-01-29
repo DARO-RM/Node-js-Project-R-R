@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <input type="text" id="Water_pre" onblur="reSum();"/>
+
+    <input type="text" id="Water_new" onblur="reSum();"/> <br>
+    <input type="text" id="Water_pre" onblur="reSum();"/>
+
+    <input type="text" id="Water_new" onblur="reSum();"/> <br>
+    <p>Auto Sum</p>
+
+    <input type="text" id="Sum" value=""/>
+    <script>
+
+        function reSum()
+        {
+            var water_pre = parseInt(document.getElementById("Water_pre").value);
+            var water_new = parseInt(document.getElementById("Water_new").value);
+            document.getElementById("Sum").value = water_new - water_pre;
+        }
+
+    </script>
+</body>
+</html>

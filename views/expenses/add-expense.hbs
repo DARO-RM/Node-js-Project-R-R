@@ -1,0 +1,333 @@
+<div class="card">
+    <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+            <h4><i class="feather icon-user-plus"></i> {{translation.Exp_New_Expense}}</h4>
+                <span class="text-pink m-l-30">{{translation.Field_required}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/expenses">
+                    <h5><i class="feather icon-arrow-left"></i> {{translation.Exp_Back_to_Expense}}</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+    <form name="registration" id="registration">
+        <div class="card-block"> 
+            <div class="panel panel-success border">
+                <div class="panel-heading bg-inverse">
+               {{translation.Expense_Payment}}
+                </div>
+                <div class="panel-body p-1">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">{{translation.Er_Date}}</label>
+                                <div class="col-sm-10">
+                                   <input type="text" class="form-control"name="date" id="date" class="form-control">
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-danger">{{translation.Exp_Amount}}</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="amount" id="amount" placeholder="">
+                                    <div class="input-group-prepend bg-inverse">    
+                                        <span class="input-group-text m-3"><label class="m-t-10">$</label></span>
+                                    </div>
+                                </div>
+                                <span class="messages"></span>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                            <label class="col-sm-12 col-form-label text-danger">{{translation.Exp_Payment_Type}}</label>
+                                <div class="col-sm-12">
+                                    <select name="payment_type" name="payment_type" id="payment_type" class="form-control">
+                                        <option value="0" selected="" disabled="">{{translation.Exp_Choose_Payment_Type}}</option>
+                                        
+                                    </select>
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-12 col-form-label">{{translation.Exp_Payment_Form}}</label>
+                                <div class="col-sm-12">
+                                    <select name="payment_form" id="payment_form" class="form-control">
+                                        <option value="0" selected="" disabled="">{{translation.Exp_Choose_Payment_Form}}</option>
+                                        
+                                    </select>
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">{{translation.Er_form_buget}}</label>
+                                <div class="col-sm-10">
+                                <select name="budget" id="budget" class="form-control">
+                                        <option value="0">{{translation.Exp_Choose_Budget}}</option>
+
+                                    </select>
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-success border m-t-10">
+                <div class="panel-heading bg-inverse">
+                    {{translation.Exp_Memo_Note}}
+                </div>
+                <div class="panel-body p-1">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-danger">{{translation.Exp_Category}}</label>
+                                <div class="col-sm-10">
+                                    <select name="category" id="category" class="single_search_select select2-hidden-accessible" tabindex="-1" aria-hidden="true" >
+                                        <option value="0" selected="" disabled="">{{translation.Exp_Choose_Category}}</option>
+                                    
+                                    </select>
+                                    <span name="category" id="category"  class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">{{translation.Exp_Expense_Note}}</label>
+                                <div class="col-sm-10">
+                                    <textarea type="text" class="form-control" placeholder="" name="expenses_note" id="expenses_note"></textarea>
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label ">{{translation.Exp_File}}</label>
+                                <div class="col-sm-10 text-center ">
+                                    <input type="file" name="files[]" id="file_data" multiple="multiple">
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-success border m-t-10">
+                <div class="panel-heading bg-inverse">
+                    {{translation.Exp_Validator}}
+                </div>
+                <div class="panel-body p-1">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">{{translation.Exp_Request_By}}</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" id="request_by" name="request_by">
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">{{translation.Exp_Approve_By}}</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" id="approved_by" name="approved_by">
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-15">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-2"></label>
+                        <div class="col-sm-10 text-right">
+                        <a href="/expenses" type="button"class="btn btn-danger m-b-0">{{translation.Cancel}}</a>
+                        <button type="submit"class="btn btn-inverse m-b-0" id="submitbtn">{{translation.Submit}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+         $('input[name="date"]').daterangepicker({
+            "singleDatePicker": true,
+            "showDropdowns": true,       
+            "autoUpdateInput": false
+    });
+
+    $('input[name="date"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY/MM/DD'));
+    });
+
+        var data = {};   
+        budget();
+        payment_type();
+        category();
+        payment_form();
+        var form = $("#registration");
+        form.on("submit", function (event) {
+            if(!form.valid()) {
+                return false; 
+            }
+            event.preventDefault();
+            var data_ajax = {};
+            data_ajax.date = $("#date").val();
+            data_ajax.amount = $("#amount").val();
+            data_ajax.expense_note =$("#expenses_note").val();
+            data_ajax.request_by =$("#request_by").val();
+            data_ajax.approved_by =$("#approved_by").val();
+            data_ajax.budget_id = $("#budget").find(":selected").val();
+            data_ajax.payment_type_id =$("#payment_type").find(":selected").val();
+            data_ajax.payment_form_id =$("#payment_form").find(":selected").val();
+            data_ajax.category_id =$("#category").find(":selected").val();
+           // data_ajax.category_id =$("#filer_input").val();
+
+           var file = $("#file_data").val();
+                data_ajax.file_data = "";
+                data_ajax.file_name = "";
+            if(file != ""){
+                const data_name_file = document.querySelector('#file_data').files[0];
+                data_ajax.file_name = data_name_file.name;
+                toBase64(data_name_file)// convert to base64
+                .then(
+                (res)=>{
+                    data_ajax.file_data = res; 
+                    $.ajax({
+                        url:"/api/expenses/add",
+                        method:"POST",
+                        dataType: "json",
+                        data:data_ajax,
+                        success:function(res){
+                           window.location.reload();
+                           
+                        },
+                        error:function(response){
+                        alert('server error occured')
+                        }
+                    }); //end ajax 
+                  }).catch((err)=>{alert(err)});
+            }else{
+                  $.ajax({
+                        url:"/api/expenses/add",
+                        method:"POST",
+                        dataType: "json",
+                        data:data_ajax,
+                        success:function(res){
+                            alert("success")
+                        },
+                        error:function(response){
+                        alert('server error occured')
+                        }
+                    }); //end ajax 
+            }
+        });//end_submit
+
+        const toBase64 = file => new Promise ((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    });//end_document
+    function payment_type(){
+        var data = {}; 
+         $.ajax({
+            url:"/api/expenses/payment_type",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                var temp = "";
+                    $.each(res.rows,function(index,data){
+                        temp += '<option value="'+data.id+'">'+data.name+'</option>'    
+                    })
+                    $("#payment_type").append(temp);
+            },
+            error:function(res){
+            alert('server error occured');
+            }
+        });//end ajax 
+    }//end_function
+    function payment_form(){
+        var data ={};
+        $.ajax({
+            url:"/api/expenses/payment_form",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                var temp = "";
+                    $.each(res.rows,function(index,data){
+                        temp += '<option value="'+data.id+'">'+data.name+'</option>'    
+                    })
+                    $("#payment_form").append(temp);
+            },
+            error:function(res){
+            alert('server error occured');
+            }
+        });//end ajax 
+    }
+    function budget(){
+        var data = {};
+         $.ajax({
+            url:"/api/expenses/budget",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                //console.log(res.rows);
+                var temp = "";
+                    $.each(res.rows,function(index,data){
+                        temp += '<option value="'+data.id+'">'+data.name+'</option>'      
+                    })
+                    $("#budget").append(temp);
+                },
+            error:function(res){
+            alert('server some error occured');
+            }
+        });//end ajax
+    }//end_fun_budget
+
+    function category(){
+        var data= {};
+        $.ajax({
+            url:"/api/expenses/category",
+            type: 'GET',
+            dataType:'json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                //console.log(res.rows);
+                var temp = "";
+                    $.each(res.rows,function(index,data){
+                        temp += '<option value="'+data.id+'">'+data.name+'</option>'    
+                    })
+                    $("#category").append(temp);
+            },
+            error:function(res){
+            alert('server error occured');
+            }
+        });//end ajax 
+    }
+
+
+</script>
+
+
+
+

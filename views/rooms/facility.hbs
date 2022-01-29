@@ -1,0 +1,242 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"></i> {{translation.Fac_Facilities}}</h4>
+                <span class="text-pink m-l-30">{{translation.Fac_Facility_Management}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/rooms">
+                    <h5><i class="feather icon-arrow-left"></i>{{translation.Fac_Back_to_Rooms}}</h5>
+                </a>
+            </div>
+            <div class="table-responsive m-t-5">
+                <table class="table" id="facility">
+                    <thead>
+                        <tr>
+                            <th class="col-1">#</th>
+                            <th class="col-1">{{translation.Fac_Name}}</th>
+                            <th class="col-1">{{translation.Fac_Cost}}</th>
+                            <th class="col-1">{{translation.Fac_Qty}}</th>
+                            <th class="col-1">{{translation.Fac_Total}}</th>
+                            <th class="col-6">{{translation.Fac_Note}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button"
+                class="btn btn-inverse waves-effect waves-light add" id="add">{{translation.Fac_Add_Facilities}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {  
+    delay(get_facility(),500);
+    $('#facility').Tabledit({
+        autoFocus: true,
+        editButton: false,
+        deleteButton: true,
+        hideIdentifier: true,
+        columns: {
+            identifier: [0, 'id'],
+            editable: [[1, 'Name'], [2, 'Cost'], [3, 'Qty'], [4, 'Total'], [5, 'Note']]
+        }
+    });
+
+
+
+    //Delete floor
+    $(document).on('click', '.tabledit-delete-button', function(){
+        var id = $(this).closest('tr').attr('id');
+           $('.tabledit-confirm-button').click(function(){
+                delete_facility(id);
+                get_facility();
+    
+            })
+    })
+    
+    //add function
+    $("#add").click(function(){
+      add_facility();
+    })
+
+    $(document).on('blur', '.tabledit-input', function(){
+            var name = $(this).attr('name');
+            var id = $(this).closest('tr').attr('id'); 
+            var value = $(this).val();
+            if(id){
+              update_facility(id,name,value);
+           }
+      })
+
+
+
+
+
+function add_facility(){
+    $.ajax({
+        url:"/api/room/facility/add",
+        method:"post",
+        dataType:'json',
+        data:{
+            'name':'Edit Name',
+            'cost': 00,
+            'qty':  00,
+            'total':00,
+            'note':'Edit note'
+        },
+        success: function(res){
+
+
+            new PNotify({
+                title: 'Add Success',
+                icon: 'icofont icofont-info-circle',
+                type: 'success',
+                delay: 500,
+                after_close: function(){
+                   get_facility();
+                }
+            });           
+
+          
+        },
+        error: function(err){
+            alert(err)
+        }
+    }) //end ajax 
+}
+
+function update_facility(id,column_name,value){
+  try{ 
+    $.ajax({
+        url:"/api/room/facility/edit",
+        method:"post",
+        dataType:'json',
+        data:{
+            'id':id,
+            'column_name':column_name,
+            'value':value
+        },
+        success: function(res){
+           new PNotify({
+                title: 'Edit Success',
+                icon: 'icofont icofont-info-circle',
+                type: 'success',
+                delay: 500,
+                after_close: function(){
+                   get_facility();
+                }
+            });
+        },
+        error: function(err){
+            alert(err);
+        }
+    }) //end ajax 
+  }catch (error) {console.log(error);}
+}
+
+function delete_facility(id){
+   try{ 
+    $.ajax({
+        url:'/api/room/facility/'+id,
+        type:"GET",
+        contentType:"application/json",
+        dataType:"json",
+        data:{'id':id},
+        success:function(res){
+            new PNotify({
+                title: 'Delete success',
+                icon: 'icofont icofont-info-circle',
+                type: 'success',
+                delay: 500,
+                after_close:function(){
+                        get_facility();
+                }
+            })
+        } ,
+        error:function(response){
+            new PNotify({
+                title: 'Server Error',
+                icon: 'icofont icofont-info-circle',
+                type: 'error'
+            });
+        }  
+    })
+   }catch (error) {
+        console.error(error);
+    }
+}
+
+function get_facility(){
+      var data = {};   
+      try{     
+        $.ajax({
+            url: '/api/room/facility/view',     
+            type: 'GET',
+            contentType: 'application/json', 
+            data: JSON.stringify(data),
+            success: function(res) {               
+            var temp = ""  
+             $.each(res.rows,function(index,data){
+                    
+                    temp += '<tr id="'+data.id+'"><th scope="row" style="display: none;">'+data.id+'</th>'
+                    
+                    temp += '<td class="tabledit-view-mode"><span class="tabledit-span">'+data.name+'</span><input class="tabledit-input form-control input-sm" type="text" name="name" value=""></td>'
+
+                    temp +=  ' <td class="tabledit-view-mode"><span class="tabledit-span">'+data.cost+'</span><input class="tabledit-input form-control input-sm" type="text" name="cost" value=""></td>'
+
+                    temp +=  '  <td class="tabledit-view-mode"><span class="tabledit-span">'+data.qty+'</span><input class="tabledit-input form-control input-sm" type="text" name="qty" value=""></td>'
+
+                    temp +=  ' <td class="tabledit-view-mode"><span class="tabledit-span">'+data.total+'</span><input class="tabledit-input form-control input-sm" type="text" name="total" value=""></td>'
+
+                    temp += '<td class="tabledit-view-mode"><span class="tabledit-span">'+ data.note +'</span><input class="tabledit-input form-control input-sm" type="text" name="note"   value=""></td>'
+
+                    temp +='</tr>'   
+                }) 
+                    
+                $("tbody").html(temp)
+                
+                $('#facility').Tabledit({
+                    autoFocus: true,
+                    editButton: false,
+                    deleteButton: true,
+                    hideIdentifier: true,
+                    columns: {
+                        identifier: [0, 'id'],
+                        editable: [[1, 'Name'], [2, 'Cost'], [3, 'Qty'], [4, 'Total'], [5, 'Note']]
+                    }
+                }); 
+            } ,
+            error:function(response){
+                new PNotify({
+                    title: 'Server Error',
+                    icon: 'icofont icofont-info-circle',
+                    type: 'error'
+                });
+            }  
+
+         })//end ajax
+     }catch (error) {
+        console.error(error);
+     }
+}
+	//protect to each keyword searching submitting
+	//into ajax request into server
+function delay(callback, ms) {
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+	}
+
+
+})//end jquery
+</script>

@@ -1,0 +1,76 @@
+
+<div class="card">		
+    <div class="card-block">
+       
+		<!-- Basic Inputs Validation start -->
+        <h5>New Permission</h5>
+        <span> Please add information</span>
+
+        <form id="main" method="post" action="/customer/new" novalidate>
+           
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name"
+                        id="name" placeholder="Text Input Validation">
+                    <span class="messages"></span>
+                </div>
+            </div>
+
+           
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control"></textarea>
+                    <span class="messages"></span>
+                </div>
+            </div>
+
+
+
+            {{!-- new2 --}}
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label ">Permission</label>
+                <div class="col-sm-20 col-xl-10">
+                  <select id='optgroup' multiple='multiple'>
+                      <optgroup label='Permission'>
+                        <option value='1'>Create</option>
+                        <option value='2'>Update</option>
+                        <option value='3' selected>Delete</option>
+                      </optgroup>
+                      <optgroup label='User'>
+                        <option value='4'>Create</option>
+                        <option value='5'>Update</option>
+                        <option value='6' selected>Delete</option>
+                      </optgroup>
+                      <optgroup label='Room'>
+                        <option value='7'>Create</option>
+                        <option value='8'>Update</option>
+                        <option value='9' selected>Delete</option>
+                      </optgroup>
+                  </select>
+                </div>
+            </div>
+
+          <div class="form-group row">
+              
+          </div>
+
+
+
+
+            <div class="form-group row">
+                <label class="col-sm-2"></label>
+                <div class="col-sm-10 text-right">
+                <button type="submit"class="btn btn-primary m-b-0">Submit</button>
+                </div>
+            </div>
+
+
+
+
+            
+          </form>
+   
+	</div>
+</div>

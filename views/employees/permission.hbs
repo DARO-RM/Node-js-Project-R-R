@@ -1,0 +1,157 @@
+<div class="card">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group row">
+					<div class="col-4">
+						<input id="search" type="text" class="form-control form-control-lg" placeholder="search">
+					</div>
+					<button class="btn btn-inverse"><i class="feather icon-search"></i></button>
+				</div>
+			</div>
+			<div class="col-md-6 text-right">
+				
+				<a href="/employees/permission/add">
+					<button class="btn btn-inverse"><i class="feather icon-plus"></i>New Permission</button>
+				</a>
+			
+			</div>
+			<div class="table-responsive m-t-5">
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="col-1 text-center">
+								<input type="checkbox" value="" style="height: 18px; width: 18px;">	
+							</th>
+							<th class="col-2 text-left">Action</th>
+							<th class="col-2">Name</th>
+							<th class="col-7">Description</th>
+						</tr>
+					</thead>
+					<tbody>
+			
+					</tbody>	
+				</table>
+			</div>
+		</div>
+ </div>
+
+<script type="text/javascript">
+
+	   list_data();
+
+		 	$('#search').keyup(function(){
+						var search = $("#search").val();
+						if(search == '')
+						{
+							list_data();
+						}else
+						{
+							search_data(search);
+						}
+			})
+
+      
+			
+	 	$(document).on('click','#delete_btn',function(){
+        var id = $(this).attr('name')
+        $.ajax({
+          url:'/api/permission/delete/'+id,
+          type:"GET",
+          contentType:"application/json",
+          dataType:"json",
+          data:{'id':id},
+          success:function(res){
+              if(res.msg=="success"){
+								alert("Delete  success!");
+                list_data();
+              }
+              else{
+                alert("cannot delete because have some err");
+              }
+          }
+        })
+    })
+	//function read all data from database
+
+  function list_data(){
+    var data = {};        
+        $.ajax({
+		  url: '/api/permission/view',         
+          type: 'GET',
+          contentType: 'application/json', 
+          data: JSON.stringify(data),
+          success: function(res) {
+            if(res.msg=='success'){
+                
+            var temp = "" 
+             $.each(res.rows,function(index,data){
+				 			
+									temp += '<tr><td class="text-center">'
+									temp +=	'<input type="checkbox" value="" style="height: 18px; width: 18px;"></td>'
+									temp += '<td>'
+									temp +=	'<div class="dropdown-split-inverse">'
+									temp +=	'<a href="/employees/permission/edit?id='+data.id+'" type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>Edit</a>'
+									temp +=	'<button type="button" class="btn btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+									temp +=	'<span class="sr-only"></span>'
+									temp +=	'</button>'
+									temp +=	'<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">'
+									temp +=	'	<a class="dropdown-item waves-effect waves-light"  id="delete_btn" href="#" name="'+data.id+'">Delete</a>'
+									temp +=	'</div></div></td>'
+
+									temp += '<td>'+ data.name +'</td>'
+									temp += '<td>'+ data.description +'</td>'
+									
+                  temp += '</tr>'
+									 
+
+                })
+                $("tbody").html(temp);
+            //end success
+            }
+            else{
+              alert(" false ")
+            }
+          }
+        }); //end ajax
+      }//end function
+			  //Search Customer
+    function search_data(search){  
+        $.ajax({
+		  url: '/api/permission/search',         
+          type: 'POST',
+          data:{'search':search},
+          success: function(res) {
+						if(res.msg =='success'){
+                 var temp = "" 
+             $.each(res.rows,function(index,data){
+				 			
+									temp += '<tr><td class="text-center">'
+									temp +=	'<input type="checkbox" value="" style="height: 18px; width: 18px;"></td>'
+									temp += '<td>'
+									temp +=	'<div class="dropdown-split-inverse">'
+									temp +=	'<a href="/employees/permission/edit?id='+data.id+'" type="button" class="btn btn-edit btn-inverse"><i class="icofont icofont-pencil-alt-2"></i>Edit</a>'
+									temp +=	'<button type="button" class="btn btn-edit-dropdown btn-inverse dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+									temp +=	'<span class="sr-only"></span>'
+									temp +=	'</button>'
+									temp +=	'<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">'
+									temp +=	'	<a class="dropdown-item waves-effect waves-light"  id="delete_btn" href="#" name="'+data.id+'">Delete</a>'
+									temp +=	'</div></div></td>'
+
+									temp += '<td>'+ data.name +'</td>'
+									temp += '<td>'+ data.description +'</td>'
+									
+                  temp += '</tr>'
+									 
+                })
+                $("tbody").html(temp);
+            //end success
+            }
+            else{
+              alert(" false ")
+            }
+          }
+        }); //end ajax
+      }//end function
+
+</script>

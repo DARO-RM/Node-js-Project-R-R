@@ -1,0 +1,445 @@
+<div class="main-body">
+    <div class="page-body">
+    <div class="card">
+      <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>{{translation.Rep_Report_Rental}}</h4>
+            </div>
+           <div class="rpchange col-md-6 text-right">
+                <a href="/reports">
+                    <h5><i class="feather icon-arrow-left"></i>{{translation.Rep_Back_Report}}</h5>
+                </a>
+            </div>
+        </div>
+        <hr>
+      </div>
+        <div class="backform card-block" >
+                <form action="">
+                   <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">{{translation.Rep_Date}}</label>
+                        <div class="col-sm-12 col-xl-4 m-b-30">
+                            <div class="f-right date-range" style="background: rgb(255, 255, 255); cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                <i class="glyphicon glyphicon-calendar icofont icofont-ui-calendar"></i>
+                                <span></span> <b class="caret"></b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">{{translation.Rep_export2_excel}}</label>
+                          <div class="col-sm-9 col-md-9 col-lg-10">
+                                <input type="radio" name="export_excel" id="export_excel_yes" value="1"> {{translation.Rep_Yes}} &nbsp;
+                                <label for="export_excel_yes"><span></span></label>
+                                <input type="radio" name="export_excel" id="export_excel_no" value="0" checked="checked"> {{translation.Rep_No}} &nbsp;
+                                <label for="export_excel_no"><span></span></label>
+                            </div>
+                    </div>
+                    
+                    <div class="part_submit">
+                            <div class="form-group row">
+                    <div class="col-sm-12 text-right">
+                        <a href="#" type="submit" class="submitbtn btn btn-inverse m-b-0 btn-sm">{{translation.Submit}}</a>
+                    </div>
+                    </div>
+                    </div>
+                </form>  
+        </div>
+    </div>
+    <div class="card1 card" style="display: none;" id="printable"  >
+	<div class="card-body tab-icon">
+            <div class="row" >
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-12">{{translation.Rep_Report}}<span class="rgd"></span>
+                            <br>
+                            <p>{{translation.Rep_Current_Date}}&nbsp;&nbsp;<span id="lblTime"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-right no_print" >
+                        <a href="#">
+                            <button  class="btn btn-inverse btn-sm waves-effect waves-light " type="button" data-toggle="modal" data-target=".categories" ><i class="feather icon-plus"></i>New Favorites</button>
+                        </a>
+                        <div class="dropdown-inverse dropdown open">
+                            <button class="btn btn-inverse btn-sm waves-effect waves-light " type="button" id="dropdown-customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="feather icon-settings"style="margin-left: 4px;"></i></button>
+                        </div>
+                    </div>
+                <div class="table-responsive">
+                <table class="table table-expandable">
+                    <thead>
+                         <tr>
+                            <th>{{ translation.Photo}}</th>
+                            <th>{{ translation.Rented_Room}}</th>
+                            <th>{{ translation.Rented_Customer}}</th>
+                            <th>{{ translation.Rented_Utilities}}</th>
+                            <th>{{ translation.Rented_Room_Fee}}</th>
+                            <th>{{ translation.Rented_Service_Fee}}</th>
+                            <th>{{ translation.Rented_Total}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--
+                        <tr>
+                            <td><img src="/assets/images/product-list/pro-l1.png" class="img-fluid"></td>
+                            <td>R-1005</td>
+                            <td>Sok Dara (2)</td>
+                            <td>
+                            <span><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Water_Fee}} 0.5 USD/M3</span>
+                            <br/>
+                            <span><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Electric_Fee}} 0.90 USD/KW</span>
+                            </td>
+                            <td>250 USD</td>
+                            <td>50 USD</td>
+                            <td>300 USD</td>
+                        </tr>
+                            
+                        <tr>
+                            <td colspan="8" style="border-top: none !important;">
+                                <div class="text-right" style="margin-top: -3em;">
+                                    <a href="/rental/rented/add" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="icofont icofont-ui-edit"></i></a>
+                                </div>
+                                <table class="table">
+                                    <tr>
+                                        <td>
+                                            <div class="row m-r-5">
+                                                <div class="table-responsive">
+                                                    <table class="table table-xs table-bordered f-14">
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Rent_Date}}</td>
+                                                            <td>03/Sep/23</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Checked_In}}</td>
+                                                            <td>10/Sep/23</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Floor_Num}}</td>
+                                                            <td>F5</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row m-r-5">
+                                                <div class="table-responsive">
+                                                    <table class="table table-xs table-bordered f-14">
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Old_Water}}</td>
+                                                            <td>1034</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Old_Electric}}</td>
+                                                            <td>2387</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row m-r-5">
+                                                <div class="table-responsive">
+                                                    <table class="table table-xs table-bordered f-14">
+                                                        <tr>
+                                                            <th>{{ translation.Rented_Name}}</th>
+                                                            <th>{{ translation.Rented_Price}}</th>
+                                                            <th>{{ translation.Rented_Qty}}</th>
+                                                            <th>{{ translation.Rental_Totals}}</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rental_Car_Parking}}</td>
+                                                            <td>20 USD</td>
+                                                            <td>1</td>
+                                                            <td>20 USD</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rental_Elevator}}</td>
+                                                            <td>15 USD</td>
+                                                            <td>1</td>
+                                                            <td>15 USD</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rental_Security}}</td>
+                                                            <td>15 USD</td>
+                                                            <td>1</td>
+                                                            <td>15 USD</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rental_Cleaning}}</td>
+                                                            <td>5 USD</td>
+                                                            <td>1</td>
+                                                            <td>5 USD</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="icofont icofont-check-circled"></i>{{ translation.Rental_Internet}}</td>
+                                                            <td>15 USD</td>
+                                                            <td>1</td>
+                                                            <td>15 USD</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        -->
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <hr size="50px" style="color: black;">
+       <div class="row text-center no_print ">
+            <div class="col-sm-12 invoice-btn-group text-center ">
+                <button type="button" onclick="printDiv('printable')"
+                    class="btn btn-inverse btn-print-invoice m-b-10 btn-sm waves-effect waves-light m-r-20">{{translation.Rep_Print}}</button>
+            </div>
+        </div>
+	</div>
+ </div>
+</div>
+</div>
+<script>
+function printDiv(divName) {
+    
+    $(".no_print").css("display","none");
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+     document.body.innerHTML = printContents;
+     window.print();
+     location.href = "/reports/rental"
+     document.body.innerHTML = originalContents;
+}
+$(document).ready(function(){
+
+    DisplayCurrentTime();
+        var fromDate = "";
+        var toDate = "";
+    //daterange
+    $('.date-range').daterangepicker({
+             ranges : {
+                'Today'       : [moment(), moment()],
+                'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            fromDate: moment().subtract(29, 'days'),
+            toDate  : moment(),
+        function (start, end) {
+            $('.date-range').find('span').html(start.format('YYYY MMMM, D') + ' - ' + end.format('YYYY MMMM, D'));
+        }
+    },
+    function(start, end) {
+        $('.date-range').find('span').html(start.format('YYYY MMMM, D') + ' - ' + end.format('YYYY MMMM, D'));
+        var fromDate = start.format('YYYY-MM-DD');
+        var toDate = end.format('YYYY-MM-DD');
+            $('.rgd').html(start.format('YYYY MMMM, D') + ' - ' + end.format('YYYY MMMM, D'));
+            $("#lblTime").html(time)
+        if(fromDate !== "" && toDate !== "") {
+            getdata(fromDate,toDate);
+        }
+    });
+    
+    $('.submitbtn').click(function(){
+            $('.rpchange').html(
+                '<div class="table_buttons pull-right">'+
+                '<button type="button" class="button-effect btn btn-inverse waves-effect waves-light btn-sm" >'+
+                '<i id="expand-collapse-icon" class="ion-chevron-up" style="margin-left: 4px;">'+
+                '</i>'+
+                '</button>'+
+                ' </div>'
+            );
+            $('.card1').show(); 
+            $(".backform").slideToggle();
+            $(".button-effect").click(function(){
+                $(".backform").slideToggle();
+                $("i", this).toggleClass("ion-chevron-down ion-chevron-up");
+            });
+            if($('input[name=export_excel]:checked').val() == "1"){
+            var table2excel = new Table2Excel();
+                table2excel.export($('table'));
+            }
+    });
+                     
+    function DisplayCurrentTime() {
+        var today = new Date();
+        var date = new Date();
+        var year = today.getFullYear();
+        var month = today.getMonth()+1;
+        var day = today.getDate();
+        var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+        var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+        hours = hours < 10 ? "0" + hours : hours;
+        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        time = year +"/"+ month+"/"+ day+" -"+hours + ":" + minutes + ":" + seconds + " " + am_pm;
+    };  
+
+    function  getdata(fromDate,toDate){     
+	    try{
+			$.ajax({
+				url: '/api/reports/rental',       
+				type : "POST",
+				cache: false,
+                data : {fromDate:fromDate,toDate:toDate},
+				success: function(res) {
+					console.log(res)
+	if(res.rows.length>0){
+			 var temp = "" ;
+	$.each(res.rows,function(index,data){
+            data.water_fee = parseFloat(data.water_fee).toFixed(2);
+            data.electric_fee = parseFloat(data.electric_fee).toFixed(2);
+            data.roomFee = parseFloat(data.roomFee).toFixed(2);
+            data.service_total = parseFloat(data.service_total).toFixed(2);
+            data.total = parseFloat(data.total).toFixed(2);
+            data.water_pre = parseFloat(data.water_pre).toFixed(2);
+            data.electric_pre = parseFloat(data.electric_pre).toFixed(2);
+        temp +=  ' <tr> '+
+        '          <td><img src="/assets/images/product-list/pro-l1.png" class="img-fluid"></td>'+
+        '           <td>'+data.roomName+'</td>'+
+        '            <td>'+data.customerName+'</td>'+
+        '                <td>'+
+        '                 <span><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Water_Fee}} '+data.water_fee+' USD/M3</span>'+
+        '                 <br/>'+
+        '                 <span><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Electric_Fee}} '+data.electric_fee+' USD/KW</span>'+
+        '                 </td>'+
+        '                 <td>'+data.roomFee+'USD</td>'+
+        '                 <td>'+data.service_total+' USD</td>'+
+        '                <td>'+data.total+' USD</td>'+
+        '             </tr>'+
+        '             <tr>'+
+        '              <td colspan="8" style="border-top: none !important;">'+
+        '               <div class="text-right" style="margin-top: -3em;">'+
+        '  <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i name="'+data.rental_id+'" class="icofont ></i></a>'+
+        '               <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i name="'+data.rental_id+'" class="icofont"></i></a>'+
+        '                </div>'+
+        '                    <table class="table">'+
+        '                         <tr>'+
+        '                             <td>'+
+        '                                 <div class="row m-r-5">'+
+        '                                     <div class="table-responsive">'+
+        '                                         <table class="table table-xs table-bordered f-14">'+
+        '                                             <tr>'+
+        '                                                <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Rent_Date}}</td>'+
+        '                                                 <td>'+data.rentDate+'</td>'+
+        '                                             </tr>'+
+        '                                             <tr>'+
+        '                                                 <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Checked_In}}</td>'+
+        '                                                 <td>'+data.checked_in+'</td>'+
+        '                                             </tr>'+
+        '                                             <tr>'+
+        '                                                 <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Floor_Num}}</td>'+
+        '                                                 <td>'+data.floorNumber+'</td>'+
+        '                                             </tr>'+
+        '                                         </table>'+
+        '                                     </div>'+
+        '                                 </div>'+
+        '                             </td>'+
+        '                             <td>'+
+       '                                  <div class="row m-r-5">'+
+       '                                      <div class="table-responsive">'+
+       '                                          <table class="table table-xs table-bordered f-14">'+
+         '                                            <tr>'+
+         '                                                <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Old_Water}}</td>'+
+        '                                                 <td>'+data.water_pre+'</td>'+
+       '                                              </tr>'+
+        '                                             <tr>'+
+        '                                                 <td><i class="icofont icofont-check-circled"></i>{{ translation.Rented_Old_Electric}}</td>'+
+        '                                                 <td>'+data.electric_pre+'</td>'+
+        '                                            </tr>'+
+        '                                         </table>'+
+        '                                    </div>'+
+        '                                 </div>'+
+        '                             </td>'+
+        '                            <td>'+
+        '                                 <div class="row m-r-5">'+
+        '                                     <div class="table-responsive">'+
+        '                                         <table class="table table-xs table-bordered f-14">'+
+        '                                         <tr>'+
+        '                                          <th>{{ translation.Rented_Name}}</th>'+
+        '                                           <th>{{ translation.Rented_Price}}</th>'+
+        '                                           <th>{{ translation.Rented_Qty}}</th>'+
+        '                                   <th>{{ translation.Rental_Totals}}</th>'+
+        '                             </tr>'
+
+        var ser_name =  data.service_name.split(',');
+        var ser_price = data.service_price.split(',');
+        var ser_qty =   data.service_qty.split(',');
+        var ser_total = data.service_total_per_unit.split(',');
+
+       if(ser_name[0] != ""){
+            for(var i in ser_name){
+
+                ser_price[i] = parseFloat(ser_price[i]).toFixed(2);
+                ser_qty[i]= parseFloat(ser_qty[i]).toFixed(2);
+                ser_total[i] = parseFloat(ser_total[i]).toFixed(2);
+
+               temp +=  ' <tr>'+
+                        ' <td><i class="icofont icofont-check-circled"></i>'+ser_name[i]+'</td>'+
+                        '   <td>'+ser_price[i]+' USD</td>'+
+                        '   <td>'+ser_qty[i]+'</td>'+
+                        '   <td>'+ser_total[i]+' USD</td>'+
+                        ' </tr>';
+            }
+       }else{
+             temp +=    ' <tr>'+
+                        ' <td><i class="icofont icofont-check-circled"></i> </td>'+
+                        '   <td>0 USD</td>'+
+                        '   <td> 0 </td>'+
+                        '   <td> 0 USD</td>'+
+                        ' </tr>';
+       }
+            temp +=     ' </table> '+
+                        ' </div> '+
+                        '  </div> '+
+                        '  </td> '+
+                        '  </tr> '+
+                        '  </table> '+
+                        '  </td> '+
+                        ' </tr> ';
+					});
+						$("tbody").html(temp).fadeIn();
+						toggle();
+					}else{
+						$("#tbody").empty().fadeIn();
+					}
+				}
+	}); 
+		}catch (error) {
+		  	console.error(error);
+		}
+    }
+   //End Get 
+function toggle(){
+    $('.table-expandable').each(function () {
+        var table = $(this);
+        table.children('thead').children('tr').append('<th></th>');
+        table.children('tbody').children('tr').filter(':odd').hide();
+        table.children('tbody').children('tr').filter(':even').click(function () {
+            var element = $(this);
+            element.next('tr').toggle('slow');
+            element.find(".table-expandable-arrow").toggleClass("up");
+        });
+        table.children('tbody').children('tr').filter(':even').each(function () {
+            var element = $(this);
+            element.append('<td><div class="table-expandable-arrow"></div></td>');
+        });
+    });
+}
+
+function delay(callback, ms){
+		var timer = 0;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function () {
+			callback.apply(context, args);
+			}, ms || 0);
+		};
+}
+      
+})
+</script>

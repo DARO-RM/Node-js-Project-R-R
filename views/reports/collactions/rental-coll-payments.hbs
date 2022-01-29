@@ -1,0 +1,193 @@
+<div class="main-body">
+    <div class="page-body">
+        <div class="card">
+      <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>{{translation.Ex_Reports_Option}}</h4>
+            </div>
+           <div class="rpchange col-md-6 text-right">
+                <a href="/reports">
+                    <h5><i class="feather icon-arrow-left"></i> {{translation.Er_Back_to_Report}}</h5>
+                </a>
+            </div>
+        </div>
+        <hr>
+      </div>
+        <div class="backform card-block" >
+                <form action="" name="registration" id="registration" novalidate="novalidate">
+                   <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">{{translation.Er_Date_Range}}:</label>
+                        <div class="col-sm-12 col-xl-4 m-b-30">
+                            <div id="reportrange" class="f-right" style="background: rgb(255, 255, 255); cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                <i class="glyphicon glyphicon-calendar icofont icofont-ui-calendar"></i>
+                                <span>{{translation.Er_Today_Date}}</span> <b class="caret"></b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">{{translation.Er_Expot_to_Excel}}:</label>
+                          <div class="col-sm-9 col-md-9 col-lg-10">
+                                <input type="radio" name="export_excel" id="export_excel_yes" value="1"> {{translation.Er_Yes}}  &nbsp;
+                                <label for="export_excel_yes"><span></span></label>
+                                <input type="radio" name="export_excel" id="export_excel_no" value="0" checked="checked"> {{translation.Er_No}} &nbsp;
+                                <label for="export_excel_no"><span></span></label>
+                            </div>
+                    </div>
+                    <div class="part_submit">
+                            <div class="form-group row">
+
+                                <div class="col-sm-12 text-right">
+                                  <a href="#" type="submit" class="submitbtn btn btn-inverse m-b-0">{{translation.Er_Submit}}</a>
+                                    {{!-- <a href="/reports/generate/summary-reports" type="submit" class="submitbtn btn btn-inverse m-b-0">Submit</a> --}}
+                            </div>
+                            </div>
+                    </div>
+                </form>  
+        </div>
+        </div>
+    <div class="card1 card" style="display: none;">
+            <div class="card-body">
+                <div class="row"id="printableArea">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-12" >{{translation.Er_Report_Date}}- <strong style="color:rgb(97, 119, 243); ">POSCAMBODIA CO.LTD Closeout :</strong> <span class="rgd"></span>
+                            <br>
+                            <p>{{translation.Er_Current_Date}}:&nbsp;&nbsp;<span id="lblTime"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-right non_print">
+                        <a href="#">
+                            <button  class="btn btn-inverse btn-sm waves-effect waves-light " type="button" data-toggle="modal" data-target=".categories" ><i class="feather icon-plus"></i>New Favorites</button>
+                        </a>
+                        <div class="dropdown-inverse dropdown open">
+                            <button class="btn btn-inverse  waves-effect waves-light btn-sm" type="button" id="dropdown-customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="feather icon-settings"style="margin-left: 4px;"></i></button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>{{translation.Er_Invoice_Number}}</th>
+                                <th>{{translation.Er_Date}}</th>
+                                <th>{{translation.Er_Room}}</th>
+                                <th>{{translation.Er_Customer}}</th>
+                                <th>{{translation.Er_Room_Fee}}</th>
+                                <th>{{translation.Er_Services_Fee}}</th>
+                                <th>{{translation.Er_Utilities_Fee}}</th>
+                                <th>{{translation.Er_Total}}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+        </div>
+            <div class="row text-center ">
+                <div class="col-sm-12 invoice-btn-group text-center">
+                    <button type="button" 
+                    class="btn btn-inverse btn-print-invoice m-b-10 waves-effect waves-light m-r-20" onclick="printDiv('printableArea')">{{translation.Er_Print}}</button>
+                </div>
+            </div>
+    </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function printDiv(divName) {
+        $(".non_print").css("display","none");
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            window.location.reload();
+    }
+    $(document).ready(function(){
+            DisplayCurrentTime();
+                var fromDate = "";
+                var toDate = "";
+               
+            $('#reportrange').daterangepicker({
+                        ranges : {
+                            'Today'       : [moment(), moment()],
+                            'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                            'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                            'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                            'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        },
+                        fromDate: moment().subtract(29, 'days'),
+                        toDate  : moment(),
+                    function (start, end) {
+                        $('#reportrange').find('span').html(start.format('YYYY MMMM, D') + ' - ' + end.format('YYYY MMMM, D'));
+                    }
+                },
+                function(start, end) {
+                $('#reportrange').find('span').html(start.format('YYYY MMMM, D') + ' - ' + end.format('YYYY MMMM, D'));
+                var fromDate = start.format('YYYY-MM-DD');
+                var toDate = end.format('YYYY-MM-DD');
+                   $('.rgd').html(start.format('YYYY MMMM, D') + ' - ' + end.format('YYYY MMMM, D'));
+                    $("#lblTime").html(time)
+                if(fromDate !== "" && toDate !== "") {
+                    getDate(fromDate,toDate);
+                }
+            });//end_date_range
+            $('.submitbtn').click(function(){
+                        $('.rpchange').html('<div class="table_buttons pull-right">'+
+                                            '<button type="button" class="button-effect btn btn-inverse waves-effect waves-light btn-sm" >'+
+                                            '<i id="expand-collapse-icon" class="ion-chevron-up" style="margin-left: 4px;">'+
+                                            '</i>'+
+                                            '</button>'+
+                                            ' </div>');
+                        $('.card1').show(); 
+                        $(".backform").slideToggle();
+                        $(".button-effect").click(function(){
+                            $(".backform").slideToggle();
+                            $("i", this).toggleClass("ion-chevron-down ion-chevron-up");
+                        });
+                        if($('input[name=export_excel]:checked').val() == "1"){
+                        var table2excel = new Table2Excel();
+                            table2excel.export($('table'));
+                    }
+            });
+        
+   //function getDate ajax
+    function getDate(fromDate, toDate){
+      $.ajax({
+        url : "http://127.0.0.1:5000/api/room/range/date",
+        type : "POST",
+        cache: false,
+        data : {fromDate:fromDate, toDate:toDate},
+        success: function(res) {
+            var temp = "" 
+            $.each(res.rows,function(index,data){
+                console.log(res);
+                temp += '<tr>'
+                temp += '<td>'+ data.Room_id +'</td>'
+                temp += '<td>'+ data.Room_name +'</td>'
+                temp += '<td>'+ data.Room_Number +'</td>'
+                temp += '<td>'+ data.floor_name +'</td></tr>'
+            })
+             $("tbody").html(temp);   
+            },
+      });
+    } 
+    function DisplayCurrentTime() {
+        var today = new Date();
+        var date = new Date();
+        var year = today.getFullYear();
+        var month = today.getMonth()+1;
+        var day = today.getDate();
+        var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+        var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+        hours = hours < 10 ? "0" + hours : hours;
+        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        time = year +"/"+ month+"/"+ day+" -"+hours + ":" + minutes + ":" + seconds + " " + am_pm;
+    };
+     
+ });//end_document
+</script>

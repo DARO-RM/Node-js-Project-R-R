@@ -1,0 +1,219 @@
+
+<div class="card">
+    <div class="card-header p-b-0">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><i class="feather icon-user-plus"> </i>{{translation.Cus_New_Customer}}</h4>
+                <span class="text-danger m-l-30"> {{translation.Cus_Required}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="/customers">
+                    <h5><i class="feather icon-arrow-left"></i>{{translation.Cus_Back_to_Customers}}</h5>
+                </a>
+            </div>
+        </div>
+        <hr/>
+    </div>
+    <div class="card-block">
+        <div class="row" hidden>
+            <div class="col-xl-12 col-md-12 col-sm-12 pos-fixed text-center preloading hide">
+                <div class="preloader3 loader-block">
+                    <div class="circ1 loader-primary"></div>
+                    <div class="circ2 loader-primary"></div>
+                    <div class="circ3 loader-primary"></div>
+                </div>
+            </div>
+        </div>
+        {{> form-people }}
+    </div>
+
+<script type="text/javascript">
+    $(document).ready(function(){  
+        
+        var form = $("#registration");
+        form.on("submit", function (e) {
+              
+            if(!form.valid()) {  return false; }
+            
+            e.preventDefault();
+
+            var data_ajax = {};
+            data_ajax.first_name = $("#first_name").val();
+            data_ajax.last_name = $("#last_name").val();
+            data_ajax.full_name = $("#full_name").val();
+            data_ajax.account_number =$("#account_number").val();
+            data_ajax.sex = $('input:radio[name=sex]:checked').val();
+            data_ajax.phone_1 = $("#phone_1").val();
+            data_ajax.phone_2 = $("#phone_2").val();
+            data_ajax.email = $("#email").val();
+            data_ajax.facebook =$("#facebook").val();
+            data_ajax.telegram =$("#telegram").val();
+            data_ajax.work =$("#work").val();
+            data_ajax.company_name =$("#company_name").val();
+            data_ajax.company_address =$("#company_address").val();
+            data_ajax.national_number =$("#national_number").val();
+            data_ajax.national_number_expire = $("#national_number_expire").val();
+            data_ajax.visa_number =$("#visa_number").val();
+            data_ajax.visa_number_expire = $("#visa_number_expire").val()
+            data_ajax.passport_number =$("#passport_number").val();
+            data_ajax.passport_number_expire =$("#passport_number_expire").val();
+            data_ajax.address_1 = $("#address_1").val();
+            data_ajax.address_2 = $("#address_2").val();
+            data_ajax.dob = $("#dob").val();
+            data_ajax.age = $("#age").val();
+            data_ajax.pob = $("#pob").val();
+            data_ajax.country = $("#country").val();
+            data_ajax.city = $("#city").val();
+            data_ajax.district =$("#district").val();
+            data_ajax.commune =$("#commune").val();
+            data_ajax.village =$("#village").val();
+            data_ajax.zip_code =$("#zip_code").val();
+            data_ajax.description =$("#description").val();
+            var image = $("#filer_input").val();
+            data_ajax.file_data = "";
+            data_ajax.file_name = "";
+
+            if(image) {
+                const image_file = document.querySelector('#filer_input').files[0];
+                data_ajax.file_name = image_file.name;
+                toBase64(image_file).then(
+                async (res)=>{
+                    data_ajax.file_data = await resizeImage(res); 
+                    $.ajax({
+                        url:"/api/customers/add",
+                        method:"POST",
+                        dataType:"json",
+                        data:data_ajax,
+                        success:function(res){   
+                            new PNotify({
+                                title: 'Add success',
+                                icon: 'icofont icofont-info-circle',
+                                type: 'success',
+                                delay: 500,
+                                after_close: function(){
+                                    history.pushState('/customers/add', '','/customers');
+                                    location.reload(); 
+                                }
+                            });
+
+                        },
+                        error:function(response){
+                            new PNotify({
+                                title: 'Server Error',
+                                icon: 'icofont icofont-info-circle',
+                                type: 'error'
+                            });
+                        }
+                    }) //end ajax
+                }).catch((err)=>{alert(err)});
+            }else{
+                $.ajax({
+                        url:"/api/customers/add",
+                        method:"POST",
+                        dataType:"json",
+                        data:data_ajax,
+                        success:function(res){
+
+                     
+                            new PNotify({
+                                title: 'Add success',
+                                icon: 'icofont icofont-info-circle',
+                                type: 'success',
+                                delay: 500,
+                                after_close: function(){
+                                    history.pushState('/customers/add', '','/customers');
+                                    location.reload(); 
+                                }
+                            });
+                          
+                                
+                         
+                            //or
+                            //$("body").load('/customers');
+                        },
+                        error:function(response){
+                            new PNotify({
+                                title: 'Server Error',
+                                icon: 'icofont icofont-info-circle',
+                                type: 'error'
+                            });
+                        }
+                }) //end ajax
+            }
+            
+        }); // end submit
+
+        $("#cancel").click(function(){
+            history.pushState('/customers/add', '','/customers');
+            location.reload(); 
+        })//end cancel
+
+         const toBase64 = file => new Promise ((resolve, reject) => {
+	    const reader = new FileReader();
+	    reader.readAsDataURL(file);
+	    reader.onload = () => resolve(reader.result);
+	    reader.onerror = error => reject(error);
+	});
+
+    const resizeImage = (base64Str) => {
+        return new Promise((resolve) => {
+            let img = new Image();
+            img.src = base64Str;
+            img.onload = () => {
+                let canvas = document.createElement('canvas');
+                const MAX_WIDTH = 300;
+                const MAX_HEIGHT = 300;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) 
+                    {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT)
+                    {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                let ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL());
+            }
+        })
+    }
+
+    function notify(message, type){
+        $.growl({
+            message: message
+        },{
+            type: type,
+            allow_dismiss: false,
+            label: 'Cancel',
+            className: 'btn-xs btn-inverse',
+            placement: {
+                from: 'top',
+                align: 'right'
+            },
+            delay: 1000,
+            animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+            },
+            offset: {
+                x: 30,
+                y: 30
+            }
+        });
+    };
+
+   
+   
+
+});//end_jquery
+</script>
